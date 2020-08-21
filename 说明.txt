@@ -1,0 +1,12 @@
+npm install
+
+npm run serve
+
+备注：
+有一些数据需要连上WiFi donouse才可以获取到
+
+大部分的页面都放在 pages文件夹，router路由跳转
+
+页面上用到的组件放到 components文件夹
+
+data里面放了一些虚拟数据
