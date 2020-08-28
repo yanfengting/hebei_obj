@@ -33,10 +33,10 @@
             let musicList = []
             for (let i = 0; i < res.data.data.length; i++) {
               let musicDatas = res.data.data[i].items
-              musicDatas.forEach(function (item) {
-                item.src = 'http://118.178.84.155:5050/' + item.src
-                item.lyric = 'http://118.178.84.155:5050/' + item.lyric
-              })
+              // musicDatas.forEach(function (item) {
+              //   item.src = 'http://118.178.84.155:5050/' + item.src
+              //   item.lyric = 'http://118.178.84.155:5050/' + item.lyrics
+              // })
               musicList.push(...musicDatas)
               tabs.push({
                 label: res.data.data[i].type,

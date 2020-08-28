@@ -37,10 +37,14 @@
         <!--<cube-checkbox v-model="checked" style="color:#95a9bf;">匿名评价</cube-checkbox>
         -->
         <div class="box box-active" @click="selCheck()" v-if="checked">
-          匿名评价
+          <div type="flex" class="van-row--flex sku_specification2" style="">
+            <div class="van-col van-col--12" :span="12">匿名评价</div>
+          </div>
         </div>
         <div class="box" @click="selCheck()" v-if="!checked">
-          匿名评价
+          <div type="flex" class="van-row--flex sku_specification2" style="">
+            <div class="van-col van-col--12" :span="12">匿名评价</div>
+          </div>
         </div>
         <input type="checkbox" style="display: none;" :checked="checked"/>
 

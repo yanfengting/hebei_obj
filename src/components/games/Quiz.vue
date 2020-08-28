@@ -1,10 +1,10 @@
 <template>
   <div id="videoAction">
-    <cube-scroll ref="scroll" :scrollEvents="['scroll']"
+    <cube-scroll ref="scroll" :scrollEvents="['scroll','scrollEnd']"
                  :data="data"
                  @scroll="onScroll">
-      <div style="padding-bottom: 100px;position: relative;display: flex">
-        <ul style="clear: both;display: block;padding-bottom: 100px;width:100%">
+      <div style="position: relative;display: flex">
+        <ul style="clear: both;display: block;width:100%">
           <li v-for="item in data"
               :key="item.name"
               :label="item.name"
@@ -54,6 +54,14 @@
   }
 </script>
 <style type="text/css">
+  .cube-scroll-list-wrapper{
+    height: 100%;
+    padding-bottom: 200px;
+  }
+    
+  #videoAction{
+    height: 100%;
+  }
   .cube-scroll-content {
     /*padding-bottom: 50px;*/
   }
@@ -86,7 +94,7 @@
     position relative
     text-align left
     // margin: 15px 10px 15px 10px;
-    height 500px // 这个高度范围里面滚动，问题设置太大会有一些显示不出来
+    height 100% // 这个高度范围里面滚动，问题设置太大会有一些显示不出来
 
     .game-content
       background: url("../../assets/images/game_bak.png") no-repeat

@@ -169,7 +169,7 @@
             }
             console.log(_self.readonly)
           }, function (error) {
-            alert('请求失败', error)
+            console.error('请求失败', error)
           })
       },
       // 点击蒙层取消
@@ -225,7 +225,7 @@
               _this.$parent.cancelMask()
             }
             , function (err) {
-              alert(err)
+              console.error(err)
             })
         }
       },

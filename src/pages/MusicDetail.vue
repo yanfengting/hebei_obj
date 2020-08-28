@@ -109,7 +109,7 @@
         seek = false
       })
       this.progressContent.addEventListener('touchstart', (event) => {
-        console.log(event.targetTouches[0].pageX)
+        // console.log(event.targetTouches[0].pageX)
         const events = event.targetTouches[0].pageX - _left
         let bl = (events / _width)
         this.progress.style.width = `${bl * 100}%` // 计算进度条所在比例宽度
@@ -129,9 +129,9 @@
         // 切换播放/暂停状态 togglePlay()
         // const _this = this
         // debugger
-        // if (this.$store.lyric) {
-        //   this.$store.lyric.stop()
-        // }
+        if (this.$store.lyric) {
+          this.$store.lyric.stop()
+        }
         // if (this.$store.state.lyric) {
         //   this.$store.state.lyric.stop()
         // }
@@ -142,6 +142,7 @@
         let music = this.getPlayMusic()
         // music.lyrics = music.lyrics.replace('/cancrieasproxy/music', '')
         this.axios.get(music.lyrics).then(response => {
+          // console.log(response.data)
           if (response.status === 200) {
             // _this.$store.state.lyric = null
             _this.$store.state.lyric = this.instanceLyric(response.data, _this.handleLyric)
@@ -153,9 +154,9 @@
         this.lyric = new Lyric(data, handle)
         // 调用this.lyric.play()方法时，进行歌词播放，引起Lyric实例对象（这里是this.lyric）的lineNum改变。当lineNum改变时，触发回调函数this.handleLyric。
          // 如果当前歌曲为播放状态，调用歌词对象的播放方法，播放歌词
-        if (this.$store.state.playFlag === true) {
-            this.lyric.play()
-        }
+        // if (this.$store.state.playFlag === true) {
+        //     this.$store.state.lyric.play()
+        // }
         return this.lyric
       },
       changePlayType: function (type) {
@@ -164,17 +165,17 @@
       // 在回调函数中，我们需要得到当前播放的歌词行数（this.currentLineNum），并且实现歌词面板的滚动（使用Scroll组件实现滚动），使当前播放的歌词始终在屏幕中间位置。
       handleLyric({ lineNum, txt }) {
         let _this = this
-        // setTimeout(function() {
+        setTimeout(function() {
           _this.currentLineNum = lineNum
           // 若当前行大于5,开始滚动,以保歌词显示于中间位置
-          if (lineNum > 5) {
-            let lineEl = _this.$refs.lyricLine[lineNum - 5]
+          if (lineNum > 4) {
+            let lineEl = _this.$refs.lyricLine[lineNum - 4]
             // 结合better-scroll，滚动歌词
             _this.$refs.lyricList.scrollToElement(lineEl, 1000)
           } else {
             _this.$refs.lyricList.scrollToElement(0, 0, 1000)
           }
-        // }, 100)
+        }, 100)
       },
       pauseMusic() {
         this.$store.state.lyric.stop()
@@ -195,7 +196,6 @@
         this.$store.state.playFlag = true
       },
       startPlayOrPause() {
-        
         let audio = document.getElementById('music')
         // debugger
         if (this.$store.state.playFlag) {
@@ -218,7 +218,7 @@
       preMusic() {
         if (this.$store.state.lyric) {
           this.$store.state.lyric.seek(0)
-          // this.$store.state.lyric.stop()
+          this.$store.state.lyric.stop()
         }
         this.$store.commit('prevMusic')
         this.getLyric()
@@ -227,13 +227,12 @@
         if (this.$store.state.lyric) {
           // 播放完成 重置歌词
           this.$store.state.lyric.seek(0)
-          // this.$store.state.lyric.stop()
+          this.$store.state.lyric.stop()
         }
         this.$store.commit('nextMusic')
         this.getLyric()
       }
     },
-
     computed: {
       isFollow() {
         return this.$store.state.lyric // 需要监听的数据

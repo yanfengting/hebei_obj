@@ -139,7 +139,6 @@
     /*width: 25%;*/
     /*padding: 2.941vw 4.412vw;*/
     color: rgb(172, 180, 194);
-    content: "viewport-units-buggyfill; padding: 2.941vw 4.412vw 2.941vw 4.412vw"
   }
 
   #brand .video-js {

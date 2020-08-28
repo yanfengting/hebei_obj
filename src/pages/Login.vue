@@ -53,6 +53,7 @@
       <div class="login-footer">
         <div class="safe-info">
           <div class="check-item">
+            <!-- <cube-checkbox v-model="loginForm.check" ></cube-checkbox> -->
             <cube-checkbox v-model="loginForm.check" :option="option"></cube-checkbox>
           </div>
           <a class="safe-detail" @click="safety_text">娱乐系统<span style="text-decoration: underline">用户协议</span></a>
@@ -68,7 +69,7 @@
   import registryToast from '../components/common/toast/index'
   //  任何地方使用
   //  registryToast.showToast('网络连接成功')
-  var that
+  // var that
 
   export default {
     name: 'login',
@@ -109,7 +110,7 @@
       // that = this.online
       let _self = this
 
-      this.axios.get('/api/4g/status', {emulateJSON: true})
+      this.axios.get('/api/4g/status', { emulateJSON: true })
         .then(function (response) {
           // 登录后跳转的页面
           if (response.data.status === 200) {
@@ -120,16 +121,17 @@
             _self.online = false
           }
         }, function (error) {
-          alert('请求失败', error)
+          console.error('4g请求失败', error)
         })
       this.axios({
         method: 'get',
-        url: 'api/flightDetail/get'
+        url: '/api/flightDetail/get'
       }).then((res) => {
+        console.log(res)
         if (res.status === 200) {
           this.flight = res.data.data
         } else {
-          console.log('数据获取失败，请刷新重试')
+          console.error('航班数据获取失败，请刷新重试')
         }
       })
       let userFormStr = sessionStorage.getItem('formitem')
@@ -237,7 +239,7 @@
               if (res.data.status === 200) {
                 this.loginForm.token = res.data.data
                 localStorage.setItem('userInfo', JSON.stringify(this.loginForm)) // JSON.stringify 将JSON转为字符串存到变量里
-                this.$router.push({path: '/main'})
+                this.$router.push({ path: '/main' })
                 registryToast.showToast('登录成功')
               } else {
                 this.error(res.data.status)
@@ -294,7 +296,7 @@
               if (res.data.status === 200) {
                 this.loginForm.token = res.data.data
                 localStorage.setItem('userInfo', JSON.stringify(this.loginForm)) // JSON.stringify 将JSON转为字符串存到变量里
-                this.$router.push({path: '/main'})
+                this.$router.push({ path: '/main' })
                 registryToast.showToast('登录成功')
               } else {
                 this.error(res.data.status)
@@ -764,7 +766,6 @@
     width: 18px;
     height: 5px;
     background: rgba(242, 242, 242, 0.8);
-    content: "viewport-units-buggyfill; width: 2.941vw";
   }
 
   .cube-slide-dots > span.active {

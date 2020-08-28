@@ -38,7 +38,7 @@
     <div class="photo-pic-list" v-show="data.thumbs.length>0">
       <p class="jj" style="width:90px;font-weight: 700;">剧照</p>
       <ol class="clearfix ml-10 mt-20 thumb-image-list-dl">
-        <li class="l cur  img-li-click" v-for="item in data.thumbs">
+        <li class="l cur  img-li-click" v-for="item in data.thumbs" :key='item'>
           <img
             :src="item"
             @click="handleImgsClick(index)"

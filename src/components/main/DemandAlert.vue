@@ -8,10 +8,16 @@
               <img :src="thumbUrl" alt>
             </div>
             <div class="main">
-
-              <div class="product-delcom" style="margin-left:-10px;margin-left:-10px;position: absolute;">
-                <p>已选 <span v-if="i===-1">种类</span><span v-else>{{type}}</span></p>
-                <p v-if="i!==-1">{{description}}</p>
+              <div class="product-delcom"
+                   style="position: absolute;"
+                   v-if="i==-1">
+                <p style="">选择种类</p>
+              </div>
+              <div class="product-delcom"
+                   style="position: absolute;"
+                   v-if="i!==-1">
+                <p style="">已选<span>{{type}}</span></p>
+                <p>{{description}}</p>
               </div>
             </div>
             <a class="sku-close" @click="cancelMask" aria-label="关闭">
@@ -23,7 +29,10 @@
           根据中国民航法规，起飞后20分钟，落地前40分钟及颠簸时，乘务员无法为您提供服务，衷心希望得到您的理解
         </div>
         <div class="product-delcom" style="margin-top: 0;">
-          <p>种类</p>
+          <!-- <p style="margin:15px 5px; font-size: 14px;">种类</p> -->
+          <div type="flex" class="van-row--flex sku_specification2" style="">
+            <div class="van-col van-col--12" :span="12">种类</div>
+          </div>
           <ul class="product-footerlist clearfix">
             <li
               v-for="(l,index) in skuArr"
@@ -115,7 +124,7 @@
             this.is_sku = false
           }
         } else {
-          alert('数据获取失败，请刷新重试')
+          console.error('数据获取失败，请刷新重试')
         }
       })
     },
@@ -276,6 +285,8 @@
 
   .product-footerlist {
     margin-top: 10px;
+    padding: 5px 0px;
+    margin: auto 15px;
   }
 
   .product-footerlist li {

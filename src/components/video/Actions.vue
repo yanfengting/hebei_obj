@@ -1,6 +1,5 @@
 <template>
   <!-- 影视 -->
-
   <div id="scroll-act"
        class="swipe-wrapper">
     <cube-scroll ref="actionScroll" :scrollEvents="['scroll','scrollEnd']"
@@ -114,7 +113,7 @@
 
       }
     },
-    components: {VideoRate}
+    components: { VideoRate }
   }
 </script>
 

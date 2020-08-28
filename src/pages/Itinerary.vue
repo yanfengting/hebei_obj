@@ -461,7 +461,6 @@
         font-style: normal;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        content: "viewport-units-buggyfill; font-size: 4.706vw";
     }
 
     .flytime {
@@ -532,7 +531,6 @@
     }
 
     .layui-timeline-item::before {
-        content: "";
         position: absolute;
         top: 0;
         z-index: 0;
@@ -548,7 +546,6 @@
     }
 
     .layui-timeline-item-first::before {
-        content: "";
         position: absolute;
         top: 0;
         left: -1px;

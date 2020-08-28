@@ -6,71 +6,15 @@
       </div>
       <span class="first-font">呼唤铃</span>
       <demand-alert :demand_sku="demand_sku" :seat="newseat"></demand-alert>
-      <!--<div v-if="is_sku" class="specification_mask2">
-        <div class="specification_com2" @click.stop="is_sku==false">
-          <div class="productConten">
-            <div class="product-delcom demand">
-              <div class="header">
-                <div class="img-wrap">
-                  <img :src="thumbUrl" alt>
-                </div>
-                <div class="main">
-
-                  <div class="product-delcom" style="margin-left:-10px;margin-left:-10px;position: absolute;">
-                    <p>已选 <span v-if="i===-1">种类</span><span v-else>{{type}}</span></p>
-                    <p v-if="i!==-1">{{description}}</p>
-                  </div>
-                </div>
-                <a class="sku-close" @click="cancelMask" aria-label="关闭">
-                  &lt;!&ndash;<i class="iconfont icon-chahao"></i>&ndash;&gt;
-                </a>
-              </div>
-            </div>
-            <div class="product-delcom product-line" style="text-align: left;color: red;padding-top: 0px;">
-              根据中国民航法规，起飞后20分钟，落地前30分钟及颠簸时，乘务员无法为您提供服务，衷心希望得到您的理解
-            </div>
-            <div class="product-delcom">
-              <p>种类</p>
-              <ul class="product-footerlist clearfix">
-                <li
-                  v-for="(l,index) in skuArr"
-                  v-bind:key="index"
-                  @click="specificationBtn(l,index)"
-                  :class="{orange:i === index}"
-                >{{l.type}}
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div type="flex" class="van-row&#45;&#45;flex sku_specification2" style="">
-            <div class="van-col van-col&#45;&#45;12" :span="12">数量</div>
-            <div class="van-col van-col&#45;&#45;12" :span="12" style="text-align: right">
-              <button class="van-stepper__plus" v-on:click="decrement">-</button>
-              <input type="text" class="van-stepper__plus" size="1" v-model="num" ref="num">
-              <button class="van-stepper__plus" @click="increment">+</button>
-            </div>
-          </div>
-          <div type="flex" class="van-row&#45;&#45;flex sku_specification3">
-            <div class="van-col van-col&#45;&#45;12" :span="12" style="line-height: 45px;">您的座位号</div>
-            <div class="van-col van-col&#45;&#45;12 number" style="text-align: right">
-              <input id="number" type="text" v-model="newseat" ref="input">
-            </div>
-          </div>
-          <cube-button class="demandBtn" @click="sku_addCart" :primary="true" v-show="i!==-1">呼唤乘务员</cube-button>
-          <cube-button class="demandBtn1" @click="toast" :primary="true" v-show="i===-1">呼唤乘务员</cube-button>
-
-        </div>
-      </div>-->
     </div>
   </div>
 </template>
 <script>
-  import registryToast from '../common/toast/index'
+  // import registryToast from '../common/toast/index'
   import DemandAlert from './DemandAlert'
 
   export default {
-    components: {DemandAlert},
+    components: { DemandAlert },
     props: {
       seat: {
         type: String
@@ -82,6 +26,7 @@
     data() {
       return {
         newseat: this.seat
+      // is_sku: this.demand_sku
       }
     },
 
@@ -127,6 +72,8 @@
 
   .product-footerlist {
     margin-top: 10px;
+    padding: 5px 0px;
+    margin: auto 15px;
   }
 
   .product-footerlist li {

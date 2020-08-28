@@ -2,6 +2,7 @@
   <div style="z-index: 99">
     <upgrade-alert :seat=this.userInfo.seat :upgrade_sku="upgrade_sku"></upgrade-alert>
     <demand-alert :seat="this.userInfo.seat" :demand_sku="demand_sku"></demand-alert>
+    <food-alert :seat="this.userInfo.seat"  :food_sku="food_sku"></food-alert>
     <transition name="fade">
       <!-- 这部分功能主要是关闭侧栏菜单，类似一层遮罩的效果 -->
       <div class="menu-mask"
@@ -94,9 +95,9 @@
 <script>
   import UpgradeAlert from '../main/UpgradeAlert'
   import DemandAlert from '../main/DemandAlert'
-
+  import FoodAlert from '../main/FoodAlert'
   export default {
-    components: {DemandAlert, UpgradeAlert},
+    components: { DemandAlert, UpgradeAlert, FoodAlert },
     data() {
       return {
         food_sku: false,
@@ -153,15 +154,21 @@
       food() {
         // this.showwait()
         // return
-        this.$parent.getRouterInfo({
-          food_sku: true,
-          demand_sku: false,
-          upgrade_sku: false
+        this.axios({
+          method: 'get',
+          url: 'api/food/chickUsable'
+        }).then((res) => {
+          if (res.data.status === 200) {
+            if (!res.data.data) {
+              this.$dialog('该功能已关闭，暂时无法使用', 'my-eable')
+            } else {
+              this.food_sku = true
+              this.hideSide()
+            }
+          }
         })
-        this.hideSide()
       },
       upgrade() {
-
         this.axios({
           method: 'get',
           url: 'api/upgrade/chickUsable'

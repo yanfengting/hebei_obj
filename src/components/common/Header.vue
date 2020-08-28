@@ -106,7 +106,7 @@
             this.endDate = res.data.data.endDate.split(' ')[1]
             this.dateDif(this.flightDetail.endDate, this.flightDetail.startDate)
           } else {
-            console.log('数据获取失败，请刷新重试')
+            console.error('航线数据获取失败，请刷新重试')
           }
         })
       }

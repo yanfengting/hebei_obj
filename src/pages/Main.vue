@@ -236,7 +236,8 @@
         startDate: '',
         day: 0,
         type: 0,
-        tcinfo: []
+        tcinfo: [],
+        online: true
       }
     },
     created: function () {
@@ -251,6 +252,22 @@
         this.$router.push('/')
       }
       console.log(userInfo)
+      // 判断在线状态/离线状态
+      let _this = this
+      this.axios.get('/api/4g/status', { emulateJSON: true })
+        .then(function (res) {
+          // console.log(res)
+          // 登录后跳转的页面
+          if (res.data.status === 200) {
+            // registryToast.showToast('网络连接成功')
+            _this.online = true
+          } else {
+            // registryToast.showToast('离线状态')
+            _this.online = false
+          }
+        }, function (error) {
+          console.error('请求失败', error)
+        })
       // console.log('seat ' + this.userInfo.seat)
       this.axios.get('/api/adv/list?mobile=' + this.userInfo.tel + '&position=' + 1).then(res => {
         if (res.data.status === 200) {
@@ -283,11 +300,13 @@
         if (res.data.status === 200) {
           if (res.data.data != null) {
             registryToast.showToast('您已经是会员了！')
-          } else {
+          } else if (this.online === true) {           
             this.$router.push('/registered_member')
+          } else if (this.online === false) {
+            registryToast.showToast('离线状态下不能注册会员哦')
           }
         } else {
-          console.log('数据获取失败')
+          console.error('数据获取失败')
         }
       })
     },
@@ -330,20 +349,20 @@
       },
       getParamSelect(msg) {
         alert(this.msg.value)
-        console.log(this.msg.value) // 获取子组件传值结果
+        // console.log(this.msg.value) // 获取子组件传值结果
       },
       // getParams() {
       //   // 取到路由带过来的参数
       //   this.seat = this.$route.params.seat
       //   console.log(this.seat)
       // },
-      getRouterInfo(params) {
-        console.log(params)
-        console.log(' 餐食 ' + params.food_sku + ' 升舱 ' + params.upgrade_sku + ' 呼唤铃 ' + params.demand_sku)
-        this.food_sku = params.food_sku
-        this.upgrade_sku = params.upgrade_sku
-        this.demand_sku = params.demand_sku
-      },
+      // getRouterInfo(params) {
+      //   console.log(params)
+      //   // console.log(' 餐食 ' + params.food_sku + ' 升舱 ' + params.upgrade_sku + ' 呼唤铃 ' + params.demand_sku)
+      //   this.food_sku = params.food_sku
+      //   this.upgrade_sku = params.upgrade_sku
+      //   this.demand_sku = params.demand_sku
+      // },
       showSide() {
         this.$store.dispatch('showSideBar')
       },
@@ -397,11 +416,11 @@
         let toast = this.$dialog('该功能正在开发中', 'my-wait')
       },
       dateDif(enddate, starttime) {
-        console.log(Date.parse(new Date(enddate)) + '---' + Date.parse(new Date(starttime)))
+        // console.log(Date.parse(new Date(enddate)) + '---' + Date.parse(new Date(starttime)))
 
         var date = Date.parse(new Date(enddate)) - Date.parse(new Date(starttime))
 
-        console.log(date)
+        // console.log(date)
         var days = date / 1000 / 60 / 60 / 24
         var daysRound = Math.floor(days) // 天
         this.day = daysRound
@@ -416,7 +435,7 @@
         return time
       }
     },
-    components: {Sidebar, Upgrade, Demand, Food}
+    components: { Sidebar, Upgrade, Demand, Food }
   }
 </script>
 

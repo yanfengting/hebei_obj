@@ -9,7 +9,7 @@
       <cube-swipe>
         <div class="bscroll-content">
           <ul class="list-unstyled vod-item-img ff-img-140">
-            <li class="col-xs-4" v-for="(item) in swipeData" @click="toDetail(item.src)">
+            <li class="col-xs-4" v-for="(item,index) in swipeData" @click="toDetail(item.src)" :key="index">
               <p class="image">
                 <a>
                   <img class="img-responsive img-thumbnail ff-img"

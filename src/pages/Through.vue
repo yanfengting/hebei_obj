@@ -32,14 +32,14 @@
       this.axios({
         method: 'get',
         url: '/api/route/view',
-        headers: {'token': this.userInfo.token}
+        headers: { 'token': this.userInfo.token }
       }).then((res) => {
         console.log(res)
         if (res.data.status === 200) {
           this.brandArr = res.data.data
           this.current = res.data.data[0].title
           this.bottomshow = true
-          let _this = this
+          // let _this = this
         } else if (res.data.status === 401) {
           this.$router.replace('/')
         } else {
@@ -172,7 +172,6 @@
     /*width: 25%;*/
     /*padding: 2.941vw 4.412vw;*/
     color: rgb(172, 180, 194);
-    content: "viewport-units-buggyfill; "
   }
 
   .cube-scroll-nav-bar-item

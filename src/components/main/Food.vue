@@ -6,70 +6,15 @@
         <!--<p class="second">Restaurant</p>-->
       </div>
       <span class="first-font">餐食</span>
-      <div v-if="is_sku" class="specification_mask2"  style="z-index: 11">
-        <div class="specification_com2" @click.stop="is_sku==false" >
-          <div class="productConten">
-            <div class="product-delcom">
-              <div class="header">
-                <div class="img-wrap">
-                  <img :src="thumbUrl" alt="">
-                </div>
-                <div class="main">
-                  <div class="price-wrap">
-                    <p class="food-price">￥{{price}}<span>/份</span></p>
-                  </div>
-                  <div class="product-delcom" style="margin-left:-10px;margin-left:-10px;position: absolute;bottom: 20px;">
-                    <p >已选 <span v-if="i===-1">种类</span><span v-else>{{type}}</span></p>
-                    <p v-if="i!==-1">{{description}}</p>
-                  </div>
-                </div>
-                <a class="sku-close" @click="cancelMask" aria-label="关闭">
-                </a>
-              </div>
-            </div>
-
-            <div class="product-delcom" >
-              <p>种类</p>
-              <ul class="product-footerlist clearfix">
-                <li
-                  v-for="(l,index) in skuArr"
-                  v-bind:key="index"
-                  @click="specificationBtn(l,index)"
-                  :class="{orange:i === index}"
-                >{{l.type}}</li>
-              </ul>
-            </div>
-          </div>
-
-          <div type="flex" class="van-row--flex sku_specification2">
-            <div class="van-col van-col--12" :span="12" >购买数量</div>
-            <div class="van-col van-col--12" :span="12" style="text-align: right">
-              <button class="van-stepper__plus" v-on:click="decrement">-</button>
-              <input type="text" class="van-stepper__plus" size="1" v-model="num" ref="num">
-              <button class="van-stepper__plus" @click="increment">+</button>
-            </div>
-          </div>
-          <div type="flex" class="van-row--flex sku_specification3">
-            <div class="van-col van-col--12" :span="12">总价</div>
-            <div class="van-col van-col--12 number" style="text-align: right">
-              <div id="number" class="number"  style="height: auto; border: 1px solid #fff;  text-align: right;">￥{{countPrice}}</div>
-            </div>
-          </div>
-          <div type="flex" class="van-row--flex sku_specification3" >
-            <div class="van-col van-col--12" :span="12" style="line-height: 45px;">您的座位号</div>
-            <div class="van-col van-col--12 number" style="text-align: right">
-              <input id="number" type="text" v-model="newseat" ref="input">
-            </div>
-          </div>
-          <cube-button class="demandBtn" @click="sku_addCart" :primary="true" v-show="i!=-1">提交订单</cube-button>
-          <cube-button class="demandBtn1"  :primary="true" v-show="i===-1">提交订单</cube-button>
-        </div>
-      </div>
+      <food-alert :food_sku="is_sku"
+                  :seat="newseat"></food-alert>
     </div>
   </div>
 </template>
 <script>
+import FoodAlert from './FoodAlert'
 export default {
+  components: { FoodAlert },
   props: {
     seat: {
       type: String
@@ -80,22 +25,14 @@ export default {
   },
 
   watch: {
-    food_sku: function (val, oldVal) {
+    sku_food: function (val, oldVal) {
       this.is_sku = val
        }
   },
   data() {
     return {
       newseat: this.seat,
-      price: null,
-      type: null,
-      thumbUrl: null,
-      description: null,
-      i: -1,
-      skuArr: [],
-      num: 1,
-      is_sku: this.issku, // 规格弹窗
-      countPrice: 0
+      is_sku: this.food_sku
     }
   },
   created: function() {
@@ -108,7 +45,7 @@ export default {
         url: '/api/food/list'
       }
     ).then((res) => {
-      console.log(res)
+      // console.log(res)
       if (res.status === 200) {
         if (res.data.data != null) {
           this.skuArr = res.data.data
@@ -123,130 +60,29 @@ export default {
           this.is_sku = false
         }
       } else {
-        alert('数据获取失败，请刷新重试')
+        console.error('数据获取失败，请刷新重试')
       }
     })
   },
   methods: {
-    increment() {
-      this.num++
-      this.countPrice = Number(this.countPrice) + this.price
-    },
-    decrement() {
-      if (this.num <= 1) {
-        // alert('受不1了啦，宝贝不能再减少啦')
-        this.num = 1
-      } else {
-        this.num--
-        this.countPrice = this.Subtr(this.countPrice, this.price)
-      }
-    },
-    Subtr(arg1, arg2) { // 减法
-      var r1, r2, m, n
-          try {
-        r1 = arg1.toString().split('.')[1].length
-      } catch (e) {
-        r1 = 0
-      }
-      try {
-        r2 = arg2.toString().split('.')[1].length
-      } catch (e) {
-          r2 = 0
-        }
-        m = Math.pow(10, Math.max(r1, r2))
-        n = (r1 >= r2) ? r1 : r2
-        return ((arg1 * m - arg2 * m) / m).toFixed(n)
-   },
     // 点餐食
     addCart() {
-      // this.$parent.showwait()
-      // return
-      this.is_sku = true
       this.axios({
         method: 'get',
-        url: '/api/food/list'
-        }
-      ).then((res) => {
-        console.log(res)
-        if (res.status === 200) {
-          if (res.data.data != null) {
-            this.is_sku = true
-            this.skuArr = res.data.data
-            this.price = res.data.data[0].price
-            this.type = res.data.data[0].type
-            // this.foodtype = res.data.data.type
-            this.thumbUrl = res.data.data[0].thumbUrl
-            this.name = res.data.data[0].type
-            this.description = res.data.data[0].description
-            this.i = -1
-          } else {
-            this.is_sku = false
-            this.$parent.getRouterInfo({
-              food_sku: false,
-              demand_sku: false,
-              upgrade_sku: false
-            })
+        url: 'api/food/chickUsable'
+      }).then((res) => {
+        if (res.data.status === 200) {
+          if (!res.data.data) {
+            this.$dialog('该功能已关闭，暂时无法使用', 'my-eable')
+            return
           }
-        }else {
-          alert('数据获取失败，请刷新重试')
+          this.is_sku = true
         }
       })
     },
     // 点击蒙层取消
     cancelMask: function() {
       this.is_sku = false
-      this.$parent.getRouterInfo({
-        food_sku: false,
-        demand_sku: false,
-        upgrade_sku: false
-      })
-    },
-    // 选择种类
-    specificationBtn: function(item, index) {
-      this.i = index // 点击选中
-      this.price = item.price
-      this.countPrice = this.price
-      this.name = item.name
-      this.type = item.type
-      this.thumbUrl = item.thumbUrl
-      this.num = 1
-      // console.log(index)
-      // console.log(item.name)
-    },
-    // 提交订单
-    sku_addCart(item) {
-      // this.seat = this.$refs.input.value // input框接收一个传过来的座位号，编辑以后获取
-      console.log(this.newseat)
-      this.$emit('getCalled', this.newseat)
-      this.newnum = this.$refs.num.value
-      console.log('价钱 ' + this.price)
-      console.log('种类 ' + this.name)
-      console.log('座位号 ' + this.seat)
-      console.log('数量 ' + this.newnum)
-      this.is_sku = false
-      if (this.i === -1) {
-      } else {
-        this.axios({
-          method: 'post',
-          url: '/api/food/submit',
-          params: {
-            'seatNo': this.seat,
-            'type': this.type,
-            'num': this.newnum,
-            'mobile': this.userInfo.tel
-          }
-        }).then((res) => {
-            if (res.data.status === 200) {
-              // 弹框提交成功
-              this.$dialog('订单提交成功', 'my-order')
-            } else {
-              this.$dialog('网络或系统错误，请重新提交', 'my-error')
-            }
-          }
-          , function (err) {
-            alert(err)
-          })
-      }
     }
   }
 }
@@ -318,13 +154,15 @@ export default {
 
 // 种类
 .product-delcom {
-  margin: 5px 10px 0px 10px ;
+  // margin: 5px 10px 0px 10px ;
   color: #323232;
   font-size: 12px;
 }
 
 .product-footerlist {
   margin-top: 4px;
+  padding: 5px 0px;
+  margin: auto 15px;
 }
 
 .product-footerlist li {
@@ -448,7 +286,7 @@ export default {
 
 .sku_specification2 {
   border-top: 1px solid #EEEEEE
-  border-bottom 1px solid #EEEEEE
+  // border-bottom 1px solid #EEEEEE
   box-sizing: border-box;
   padding: 5px 0px;
   margin auto 15px;

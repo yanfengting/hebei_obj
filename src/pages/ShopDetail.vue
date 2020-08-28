@@ -91,44 +91,6 @@
           <cube-button class="demandBtn1" :primary="true" v-show="i===-1">提交订单</cube-button>
         </div>
       </div>
-      <!--<div class="specification_com2" @click.stop="is_sku==false">
-        <div class="productConten">
-          <div class="product-delcom">
-            <div class="header">
-              <div class="img-wrap">
-                  <img src="//img.alicdn.com/imgextra/i1/3201286958/TB2IT6BX5CYBuNkHFCcXXcHtVXa_!!3201286958.jpg_640x640q85s150_.webp" alt="">
-                &lt;!&ndash; <img :src="thumbURL" alt=""> &ndash;&gt;
-              </div>
-              <div class="main">
-                <div class="price-wrap">
-                  &lt;!&ndash; <p class="">￥{{price}}</p> &ndash;&gt;
-                  <p>￥88</p>
-                </div>
-                <li>dsdvgfesdg</li>
-              </div>
-              <a class="sku-close" @click="cancelMask" aria-label="关闭">
-                <i class="iconfont icon-chahao"></i>
-              </a>
-            </div>
-          </div>
-
-        </div>
-        <div type="flex" class="van-row&#45;&#45;flex sku_specification2">
-          <div class="van-col van-col&#45;&#45;12" :span="12">购买数量</div>
-          <div class="van-col van-col&#45;&#45;12" :span="12" style="text-align: right">
-            <button class="van-stepper__plus" v-on:click="decrement">-</button>
-            <input type="text" class="van-stepper__input" size="1" v-model="num" ref="num">
-            <button class="van-stepper__plus" @click="increment">+</button>
-          </div>
-        </div>
-        <div type="flex" class="van-row&#45;&#45;flex sku_specification2">
-          <div class="van-col van-col&#45;&#45;12" :span="12">您的座位号</div>
-          <div class="van-col van-col&#45;&#45;12 number" style="text-align: right">
-            <input id="number" type="text" v-model="newseat" ref="input">
-          </div>
-        </div>
-        <cube-button @click="goods_addCart" :primary="true">提交订单</cube-button>
-      </div>-->
     </div>
   </div>
 </template>
@@ -244,7 +206,6 @@
         console.log('fail', err)
       },      
       saveImg() {
-        
         var u = navigator.userAgent, app = navigator.appVersion;
         var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // Android
         var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios

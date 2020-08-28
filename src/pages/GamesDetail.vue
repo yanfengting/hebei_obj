@@ -11,7 +11,7 @@
         <div class="game-desc">
           <div class="game-name">{{data.name}}</div>
           <button
-            style="font-size:15px;z-index:1111;width:90px;padding: 5px 15px;background-color:#569fff;color:white;outline:none;border:none;border-radius:5px"
+            style="font-size:15px;z-index:1;width:90px;padding: 5px 15px;background-color:#569fff;color:white;outline:none;border:none;border-radius:5px"
             @click="playGame()">开始游戏
           </button>
         </div>

@@ -37,6 +37,9 @@ import magDetail from '@/pages/magDetail.vue'
 import VideoDetail from '@/pages/VideoDetail.vue'
 import UserProtocol from '@/pages/UserProtocol.vue'
 import RegisteredMember from '@/pages/RegisteredMember.vue'
+import Rename from '@/pages/Rename.vue'
+import Reseat from '@/pages/Reseat.vue'
+import Rephone from '@/pages/Rephone.vue'
 
 Vue.use(Router)
 
@@ -178,7 +181,20 @@ export default new Router({
     path: '/registered_member',
     name: 'registered_member',
     component: RegisteredMember
+  }, {
+    path: '/rename',
+    name: 'rename',
+    component: Rename
+  }, {
+    path: '/reseat',
+    name: 'reseat',
+    component: Reseat
+  }, {
+    path: '/rephone',
+    name: 'rephone',
+    component: Rephone
   }
+
   ],
   scrollBehavior(to, from, savedPosition) {
     return {
