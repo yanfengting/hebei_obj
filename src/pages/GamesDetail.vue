@@ -22,11 +22,11 @@
       <div class="swiper-wrapper">
         <div class="swiper-slide"
              v-for="(adimg,index) in data.thumbs"
-             v-bind:key="index">
+             v-bind:key="index"  @click="handleImgsClick(index)" >
           <img width="100%"
                height="auto"
                :src="adimg"
-               class="swiper-lazy">
+               class="swiper-lazy" >
         </div>
       </div>
       <!-- Add Pagination -->
@@ -34,7 +34,7 @@
     </div>
 
     <div>
-      <p style="width:90px;font-size:15px;font-weight: 700;margin:10px ;">简介</p>
+      <p class="jj" style="width:90px;font-weight: 700;">简介</p>
       <div class="gamecontainer">
         <span class="gameinfo">
           {{data.description}}
@@ -52,6 +52,7 @@
     data() {
       return {
         data: {},
+        initialIndex: 0,
         value: 5
       }
     },
@@ -75,6 +76,24 @@
       })
     },
     methods: {
+      // 点击放大查看图片
+      handleImgsClick(index) {
+        this.initialIndex = index
+        const params = {
+          $props: {
+            imgs: this.data.thumbs,
+            initialIndex: 'initialIndex', // 响应式数据的key名
+            loop: false
+          },
+          $events: {
+            change: (i) => {
+              // 必须更新 initialIndex
+              this.initialIndex = i
+            }
+          }
+        }
+        this.$createImagePreview({ ...params }).show()
+      },
       initbanner() {
         let swiper = new Swiper('.swiper-container', {
           spaceBetween: 30,
@@ -113,6 +132,12 @@
   }
 </script>
 <style lang="stylus">
+  .jj
+    font-size: 14px
+    margin: 10px;
+    margin-left 11px;
+    margin-right: 11px;
+
   /* 轮播图 */
   .swiper-container
     width 100%

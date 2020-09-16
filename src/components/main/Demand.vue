@@ -31,9 +31,9 @@
     },
 
     watch: {
-      demand_sku: function (val, oldVal) {
-        this.is_sku = val
-      }
+      // demand_sku: function (val, oldVal) {
+      //   this.is_sku = val
+      // }
     },
     created: function () {
     },
@@ -72,8 +72,8 @@
 
   .product-footerlist {
     margin-top: 10px;
-    padding: 5px 0px;
-    margin: auto 15px;
+    // padding: 5px 0px;
+    
   }
 
   .product-footerlist li {
@@ -131,10 +131,13 @@
     background: #fff;
     border-radius: 10px 10px 0px 0px;
   }
-
+  .sku_border {
+    border-bottom 1px solid #EEEEEE
+  
+  }
   .sku_specification3 {
     /*border-top: 1px solid #EEEEEE*/
-    border-bottom 1px solid #EEEEEE
+    // border-bottom 1px solid #EEEEEE
     box-sizing: border-box;
     margin auto 15px;
   }

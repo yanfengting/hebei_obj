@@ -36,14 +36,14 @@
       <div style="width:200px;font-size:13px;">
         <!--<cube-checkbox v-model="checked" style="color:#95a9bf;">匿名评价</cube-checkbox>
         -->
-        <div class="box box-active" @click="selCheck()" v-if="checked">
+        <div class="box1 box-active" @click="selCheck()" v-if="checked">
           <div type="flex" class="van-row--flex sku_specification2" style="">
-            <div class="van-col van-col--12" :span="12">匿名评价</div>
+            <div class="van-col van-col--12" :span="12" style="color: rgb(149, 169, 191);margin-left: 20px;">匿名评价</div>
           </div>
         </div>
-        <div class="box" @click="selCheck()" v-if="!checked">
+        <div class="box1" @click="selCheck()" v-if="!checked">
           <div type="flex" class="van-row--flex sku_specification2" style="">
-            <div class="van-col van-col--12" :span="12">匿名评价</div>
+            <div class="van-col van-col--12" :span="12" style="color: rgb(149, 169, 191);margin-left: 20px;">匿名评价</div>
           </div>
         </div>
         <input type="checkbox" style="display: none;" :checked="checked"/>
@@ -110,22 +110,22 @@
         method: 'post',
         url: 'api/order/unfinished'
       }).then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.status === 200) {
           this.orderNum = res.data.data
         } else {
-          console.log('数据获取失败，请刷新重试')
+          console.error('数据获取失败，请刷新重试')
         }
       })
       this.axios({
         method: 'get',
         url: 'api/flightDetail/get',
-        headers: {'token': this.userInfo.token}
+        headers: { 'token': this.userInfo.token }
       }).then((res) => {
         if (res.status === 200) {
           this.flightDetail = res.data.data
         } else {
-          console.log('数据获取失败，请刷新重试')
+          console.error('数据获取失败，请刷新重试')
         }
       })
     },
@@ -150,8 +150,8 @@
         }
       },
       fileChange(data) {
-        console.log('data')
-        console.log(data)
+        // console.log('data')
+        // console.log(data)
         this.imgdata = data
         // this.$options.methods.submitBtn(data)
       },
@@ -164,9 +164,7 @@
           this.errors.push('请对服务态度作出评价！')
         } else if (this.value4 === 0) {
           this.errors.push('请对整体印象作出评价！')
-        } /*else if (this.value3 === '') {
-          this.errors.push('请输入意见或建议！')
-        }*/ else if (this.upload === '') {
+        }  else if (this.upload === '') {
           this.errors.push('请选择至少一张图片！')
         } else if (this.phone === '') {
           this.errors.push('请输入手机号！')
@@ -179,7 +177,9 @@
           this.postData()
           // this.$router.push('/main')
           // console.log('submit', e)
-        }
+        } /* else if (this.value3 === ' ') {
+          this.errors.push('请输入意见或建议！')
+        } */
         this.$refs.cubeinput.style = 'solid 1px red'
         if (this.errors.length > 0) {
           registryToast.showToast(this.errors[0])
@@ -220,14 +220,14 @@
         instans.post('/api/feedback/submit', teldata).then(
           function (res) {
             toast.hide()
-            console.log(res)
+            // console.log(res)
             if (res.data.status === 200) {
               console.log('提交成功')
               registryToast.showToast('提交成功')
               that.$router.push('/main')
             } else {
               registryToast.showToast('提交失败，请重试!')
-              console.log('请求失败')
+              console.error('请求失败')
             }
           },
           function (error) {
@@ -289,15 +289,15 @@
 
   .opinion-footer .cube-btn {
     width: 90%;
-    position: fixed;
+    /* position: fixed; */
     bottom: 20px;
   }
 
-  .box {
-    height: 30px;
+  .box1 {
+    /* height: 30px; */
     width: 200px;
     line-height: 30px;
-    padding-left: 24px;
+    padding-left: 10px;
   }
 
   textarea::-webkit-input-placeholder {

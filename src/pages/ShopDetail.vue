@@ -14,18 +14,16 @@
       </div>
     </div>
 
-    <!-- <div class="module-price">
-      <p>{{item.name}}</p>
-    </div> -->
-
     <div class="module-price" >
-      <p
-        class="module-content">{{item.description}}</p>
+      <p  class="module-content">{{item.description}}</p>
     </div>
 
-    <div class="module-price" v-for="(l,index) in item.thumbUrls" v-bind:key="index" style="padding-bottom: 55px;" >
+    <div class="module-price" v-for="(l,index) in item.thumbUrls" v-bind:key="index"  >
       <!-- <p >{{l}}</p> -->
       <img :src="l" alt="">
+    </div>
+    <div style="width: 100%;margin: 0px auto;left: 0px;right: 0px;bottom: 0px">
+      <button class="savegift2" style=""></button>
     </div>
 
     <div class="marsk-qrcode" v-if = "is_save">
@@ -65,7 +63,7 @@
               </div>
             </div>
           </div>
-          <div type="flex" class="van-row--flex sku_specification2">
+          <div type="flex" class="van-row--flex sku_specification2 sku_margin">
             <div class="van-col van-col--12" :span="12">购买数量</div>
             <div class="van-col van-col--12" :span="12" style="text-align: right">
               <button class="van-stepper__plus" v-on:click="decrement">-</button>
@@ -73,7 +71,7 @@
               <button class="van-stepper__plus" @click="increment">+</button>
             </div>
           </div>
-          <div type="flex" class="van-row--flex sku_specification3">
+          <div type="flex" class="van-row--flex sku_specification3 ">
             <div class="van-col van-col--12" :span="12">总价</div>
             <div class="van-col van-col--12 number" style="text-align: right">
               <div id="number" class="number" style="height: auto; border: 1px solid #fff;  text-align: right;">
@@ -81,8 +79,8 @@
               </div>
             </div>
           </div>
-          <div type="flex" class="van-row--flex sku_specification3">
-            <div class="van-col van-col--12" :span="12" style="line-height: 45px;">您的座位号</div>
+          <div type="flex" class="van-row--flex sku_specification3 ">
+            <div class="van-col van-col--12" :span="12" style="">您的座位号</div>
             <div class="van-col van-col--12 number" style="text-align: right">
               <input id="number" type="text" v-model="newseat" ref="input">
             </div>
@@ -96,7 +94,7 @@
 </template>
 <script>
   import Nav from '../components/common/Nav.vue'
-  import {drawPoster} from '../painter'
+  import { drawPoster } from '../painter'
   import registryToast from '../components/common/toast/index'
   export default {
     data() {
@@ -107,52 +105,65 @@
         i: 0,
         num: 1,
         skuArr: [],
-        countPrice:0,
+        countPrice: 0,
         item: {},
         items: [],
         is_save: false,
         destArr: [],
         newseat: '',
         src: '',
-        painting:{}
+        painting: {}
       }
     },
     mounted: function() {
-
-       let userInfoStorage = localStorage.getItem('userInfo') // JSON.stringify 将JSON转为字符串存到变量里
-       let userInfo = JSON.parse(userInfoStorage)
-       this.newseat = userInfo.seat
-       this.userInfo = userInfo
-        let id = this.$route.query.id
-        this.axios({
-          method: 'get',
-          url: '/api/item/' + id
-        }).then((res) => {
-          console.log(res.data.data)
-          let item  = res.data.data;
-          let href = window.location.href
-          let baseUrl = href.split('#')[0]
-          item.urlPoster =  baseUrl + item.urlPoster
-          item.url = item.urlBuy
-          this.item = item
-          this.price = item.price
-          this.countPrice = this.price
-          const params={
-            type:'pro', // 尝试换一下base,image
-            item: item
+      let userInfoStorage = localStorage.getItem('userInfo') // JSON.stringify 将JSON转为字符串存到变量里
+      let userInfo = JSON.parse(userInfoStorage)
+       // 获取个人信息接口
+      this.axios.get('/api/user/userInfo?id=' + userInfo.token).then(res => {
+        console.log(res)
+        if (res.data.status === 200) {
+          if (res.data.data !== null) {
+            // this.member = res.data.data
+            // this.id = res.data.data.id
+            // this.tel = res.data.data.mobile
+            // this.name = res.data.data.name
+            this.newseat = res.data.data.seatNo
           }
-          drawPoster(params).then(res=>{
-              this.painting = res
-          })
-        });
+        } else {
+          console.error('用户数据获取失败')
+        }
+      })
+      //  this.newseat = userInfo.seat
+      //  this.userInfo = userInfo
+      let id = this.$route.query.id
+      this.axios({
+        method: 'get',
+        url: '/api/item/' + id
+      }).then((res) => {
+        // console.log(res.data.data)
+        let item = res.data.data
+        let href = window.location.href
+        let baseUrl = href.split('#')[0]
+        item.urlPoster = baseUrl + item.urlPoster
+        item.url = item.urlBuy
+        this.item = item
+        this.price = item.price
+        this.countPrice = this.price
+        const params = {
+          type: 'pro', // 尝试换一下base,image
+          item: item
+        }
+        drawPoster(params).then(res => {
+            this.painting = res
+        })
+      })
     },
     created: function () {
       // var item = localStorage.getItem('item')
-
     },
     methods: {
       saveLink() {
-        this.is_save = true;
+        this.is_save = true
       },
       buyGoods() {
         this.is_sku = true
@@ -194,26 +205,26 @@
         this.is_sku = false
       },
       changePage(current) {
-        console.log('当前轮播图序号为:' + current)
+        // console.log('当前轮播图序号为:' + current)
       },
       clickHandler(item, index) {
-        console.log(item, index)
-      },// 保存
+        // console.log(item, index)
+      }, // 保存
       success(src) {
         this.src = src
       },
       fail(err) {
-        console.log('fail', err)
-      },      
+        // console.log('fail', err)
+      },
       saveImg() {
-        var u = navigator.userAgent, app = navigator.appVersion;
+        var u = navigator.userAgent, app = navigator.appVersion
         var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // Android
-        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios
         if (isAndroid) {
-            var link = document.createElement('a');
-            link.href = this.src;
-            link.download = this.item.urlPoster || 'default.jpg';
-            link.click();
+            var link = document.createElement('a')
+            link.href = this.src
+            link.download = this.item.urlPoster || 'default.jpg'
+            link.click()
         }
         if (isIOS) {
            this.toast = this.$createToast({
@@ -222,8 +233,9 @@
           })
           this.toast.show()
         }
-      },sku_addCart() {
-        let _this = this;
+      },
+      sku_addCart() {
+        let _this = this
         // item/submit
          this.axios({
           method: 'get',
@@ -246,8 +258,7 @@
               _this.showError()
             }
             this.is_sku = false
-            
-        });
+        })
       },
       showSuccess() {
         this.$dialog('订单提交成功', 'my-order')
@@ -255,7 +266,7 @@
       showError(msg) {
         let msgStr = '网络或系统错误，请重新提交'
         if (msg) {
-          msgStr = msg
+          msg = msgStr
         }
         this.$dialog(msg, 'my-error')
       }
@@ -266,7 +277,6 @@
   }
 </script>
 <style>
-
   .module-price {
     padding: 0px 20px;
   }
@@ -295,7 +305,8 @@
     margin: 10px 0px;
   }
   .marsk-qrcode{
-    position: absolute;
+    /* position: absolute; */
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -328,7 +339,12 @@
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
-
+  .savegift2 {
+    background-color: white;
+    width: 100%;
+    height: 48px;
+    border: none;
+  }
   .saveimg {
     width: 85%;
     height: 48px;
@@ -338,9 +354,6 @@
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
-
-
-
   .buygift {
     width: 50%;
     height: 48px;

@@ -142,6 +142,7 @@
       cancelMask: function () {
         this.upgrade_sku = false
         this.demand_sku = false
+        this.food_sku = false
       },
       accountCenter: function () {
         this.$router.push('/account_center')

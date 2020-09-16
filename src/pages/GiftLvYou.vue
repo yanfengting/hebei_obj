@@ -20,7 +20,7 @@
       </div>
       <div class="gtype-item-type-right">
         <div class="type-title">{{currStore.name}}</div>
-        <div class="type-info">华夏云集(重庆)文化传媒有限公司于壹零壹陆年注册成立，主要经营设计、制作、代理、发布国内广告等。</div>
+        <div class="type-info">XXX云集(重庆)文化传媒有限公司于壹零壹陆年注册成立，主要经营设计、制作、代理、发布国内广告等。</div>
 
       </div>
     </div>
@@ -28,10 +28,8 @@
       <div class="list-body">
         <!--<p class="gift-title">精品推荐</p>-->
         <a v-for="item in giftArr" @click="shopDetail(item)"
-           class="list-item">
-          <div class="list-img">
-            <img v-bind:src="item.urlPoster">
-          </div>
+           class="list-item" v-bind:key="item">
+            <a class="f" :style="{'background': 'url('+item.urlPoster+') no-repeat','background-size': '100% 100%'  }"></a>
           <div class="list-mes">
             <li class="list-title">{{item.name}}</li>
             <div class="list-mes-item">
@@ -125,16 +123,16 @@
   } */
   .gtype-item {
     text-align: center;
-    width: 33.33%;
+    width: 30%;
     float: left;
     position: relative;
     z-index: 0;
-    padding: 10px 0 0;
+    /* padding: 10px 0 0; */
     font-size: 13px;
   }
 
   .gtype-icon {
-    height: 55px;
+    /* height: 55px; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -151,7 +149,7 @@
     overflow: hidden;
     text-align: center;
     color: #95a9bf;
-    padding: 14px 10px 0px 10px;
+    /* padding: 14px 10px 0px 10px; */
     line-height: 22px;
   }
 

@@ -109,7 +109,6 @@
       }
       // that = this.online
       let _self = this
-
       this.axios.get('/api/4g/status', { emulateJSON: true })
         .then(function (response) {
           // 登录后跳转的页面
@@ -127,7 +126,7 @@
         method: 'get',
         url: '/api/flightDetail/get'
       }).then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.status === 200) {
           this.flight = res.data.data
         } else {

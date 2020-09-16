@@ -4,7 +4,7 @@
        style="z-index: 11">
     <div class="specification_com2"
          @click.stop="is_sku==false">
-      <div class="productConten">
+      <div class="productConten productPadding">
         <div class="product-delcom">
           <div class="header">
             <div class="img-wrap">
@@ -21,7 +21,7 @@
                 <p style="">选择餐食种类</p>
               </div>
               <div class="product-delcom"
-                   style="margin-left:-5px"
+                   style="margin-left:-5px "
                    v-if="i!==-1">
                 <p style="">已选<span>{{type}}</span></p>
                 <p>{{description}}</p>
@@ -34,9 +34,9 @@
           </div>
         </div>
 
-        <div class="product-delcom">
+        <div class="sku_border sku_margin">
           <!-- <p style="margin:15px 5px; font-size: 14px;">种类</p> -->
-          <div type="flex" class="van-row--flex sku_specification2" style="">
+          <div type="flex" class="van-row--flex " style="">
             <div class="van-col van-col--12" :span="12">种类</div>
           </div>
           <ul class="product-footerlist clearfix">
@@ -48,8 +48,8 @@
         </div>
       </div>
 
-      <div type="flex"
-           class="van-row--flex sku_specification2" style="border-bottom 1px solid #EEEEEE">
+      <div type="flex "
+           class="van-row--flex sku_specification2 sku_border sku_margin" style="border-bottom 1px solid #EEEEEE">
         <div class="van-col van-col--12"
              :span="12">购买数量</div>
         <div class="van-col van-col--12"
@@ -67,7 +67,20 @@
         </div>
       </div>
       <div type="flex"
-           class="van-row--flex sku_specification3">
+          class="van-row--flex sku_specification3 sku_border">
+        <div class="van-col van-col--12"
+            :span="12"
+            style="">您的座位号</div>
+        <div class="van-col van-col--12 number"
+            style="text-align: right">
+          <input id="number"
+                type="text"
+                v-model="newseat"
+                ref="input">
+        </div>
+      </div>
+      <div type="flex "
+           class="van-row--flex sku_specification3 sku_border">
         <div class="van-col van-col--12"
              :span="12">总价</div>
         <div v-if="i!==-1"
@@ -78,25 +91,14 @@
                style="height: auto; border: 1px solid #fff;  text-align: right;"><strong>¥</strong>{{countPrice}}</div>
         </div>
       </div>
-      <div type="flex"
-           class="van-row--flex sku_specification3">
-        <div class="van-col van-col--12"
-             :span="12"
-             style="line-height: 45px;">您的座位号</div>
-        <div class="van-col van-col--12 number"
-             style="text-align: right">
-          <input id="number"
-                 type="text"
-                 v-model="newseat"
-                 ref="input">
-        </div>
-      </div>
+
       <cube-button class="foodBtn"
                    @click="sku_addCart"
                    :primary="true"
                    v-show="i!=-1">提交订单</cube-button>
       <cube-button class="foodBtn1"
                    :primary="true"
+                    @click="toast"
                    v-show="i===-1">提交订单</cube-button>
     </div>
   </div>
@@ -139,6 +141,19 @@ export default {
     var userInfo = localStorage.getItem('userInfo')
     this.userInfo = JSON.parse(userInfo) // 转为JSON
     // console.log('tel: ' + this.userInfo.tel)
+    // 获取个人信息接口
+      this.axios.get('/api/user/userInfo?id=' + this.userInfo.token).then(res => {
+        // console.log(res)
+        if (res.data.status === 200) {
+          if (res.data.data !== null) {
+            // this.member = res.data.data
+            // this.id = res.data.data.id
+            // this.tel = res.data.data.mobile
+            // this.name = res.data.data.name
+            this.seat = res.data.data.seatNo
+          }
+        }
+      })
     this.axios({
       method: 'get',
       url: 'api/food/list'
@@ -216,11 +231,12 @@ export default {
             this.i = -1
           } else {
             this.is_sku = false
-            this.$parent.getRouterInfo({
-              food_sku: false,
-              demand_sku: false,
-              upgrade_sku: false
-            })
+            this.$parent.cancelMask()
+            // this.$parent.getRouterInfo({
+            //   food_sku: false,
+            //   demand_sku: false,
+            //   upgrade_sku: false
+            // })
           }
         } else {
           console.log('餐食数据获取失败，请刷新重试')
@@ -244,7 +260,7 @@ export default {
     },
     // 点击蒙层取消
     cancelMask: function () {
-      // this.food_sku = false
+      this.is_sku = false
       this.$parent.cancelMask()
     },
     // 选择种类
@@ -261,10 +277,8 @@ export default {
     },
     // 提交订单
     sku_addCart (item) {
-      // this.seat = this.$refs.input.value // input框接收一个传过来的座位号，编辑以后获取
-      // console.log(this.newseat)
       this.$emit('getCalled', this.newseat)
-      this.newnum = this.$refs.num.value
+      this.newnum = this.$refs.num.value // input框接收一个传过来的座位号，编辑以后获取
       // console.log('价钱 ' + this.price)
       // console.log('种类 ' + this.type)
       // console.log('座位号 ' + this.seat)
@@ -355,9 +369,9 @@ export default {
   text-align: left;
 }
 .product-footerlist {
-  margin-top: 10px;
-  padding: 5px 0px;
-  margin: auto 15px;
+  // margin-top: 10px;
+  // padding: 5px 0px;
+
 }
 .product-footerlist li {
   /* border: 1px dashed orange; */
@@ -406,7 +420,7 @@ export default {
 }
 .sku_specification3 {
   /* border-top: 1px solid #EEEEEE */
-  border-bottom: 1px solid #EEEEEE;
+  // border-bottom: 1px solid #EEEEEE;
   box-sizing: border-box;
   padding: 5px 0px;
   margin: auto 15px;

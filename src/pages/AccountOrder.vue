@@ -7,7 +7,8 @@
       <!--<div class="scroll-content">-->
       <div class="line1" v-for="(l,index) in orderArr" v-bind:key="index">
         <div class="order-img">
-          <img src="../assets/images/item_img.png" alt="">
+          <!-- <img src="" alt=""> -->
+          <div class='img2'></div>
         </div>
         <!-- <div class="dpop" title="弹框" v-if="l.orderType === 'IT'" v-show="orderitem"> {{l.item}}</div> -->
         <div class="orderInfo">
@@ -179,12 +180,15 @@
    .line1 .order-img
     height: 100%
     width: 30%;
-  .order-img img
-    width: 70px;
+    display: flex;
+  .order-img .img2
+    height: 70px;
+    width :70px;
     border-radius 5px
     margin 10px
-    // background-size 100%
-    background-position:50% 50%;
+    background: url("../assets/images/item_img.png") no-repeat center 
+    background-size 100% 100%
+    
   .title
     margin-bottom 10px;
     height 20px;

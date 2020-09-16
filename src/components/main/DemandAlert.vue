@@ -1,7 +1,7 @@
 <template>
   <div v-if="is_sku" class="specification_mask2" style="z-index: 11">
     <div class="specification_com2" @click.stop="is_sku==false">
-      <div class="productConten">
+      <div class="productConten productPadding">
         <div class="product-delcom demand">
           <div class="header">
             <div class="img-wrap">
@@ -25,12 +25,12 @@
             </a>
           </div>
         </div>
-        <div class="product-delcom product-line" style="text-align: left;color: red;padding-top: 0px;">
+        <div class="product-delcom product-line sku_border" style="text-align: left;color: red;padding-top: 0px;">
           根据中国民航法规，起飞后20分钟，落地前40分钟及颠簸时，乘务员无法为您提供服务，衷心希望得到您的理解
         </div>
-        <div class="product-delcom" style="margin-top: 0;">
+        <div class="product-delcom sku_border sku_margin" style="margin-top: 0;">
           <!-- <p style="margin:15px 5px; font-size: 14px;">种类</p> -->
-          <div type="flex" class="van-row--flex sku_specification2" style="">
+          <div type="flex" class="van-row--flex " style="">
             <div class="van-col van-col--12" :span="12">种类</div>
           </div>
           <ul class="product-footerlist clearfix">
@@ -45,7 +45,7 @@
         </div>
       </div>
 
-      <div type="flex" class="van-row--flex sku_specification2" style="">
+      <div type="flex sku_border" class="sku_margin sku_border van-row--flex sku_specification2" style="">
         <div class="van-col van-col--12" :span="12">数量</div>
         <div class="van-col van-col--12" :span="12" style="text-align: right">
           <button class="van-stepper__plus" v-on:click="decrement">-</button>
@@ -53,8 +53,8 @@
           <button class="van-stepper__plus" @click="increment">+</button>
         </div>
       </div>
-      <div type="flex" class="van-row--flex sku_specification3">
-        <div class="van-col van-col--12" :span="12" style="line-height: 45px;">您的座位号</div>
+      <div type="flex" class="van-row--flex sku_specification3 sku_border">
+        <div class="van-col van-col--12" :span="12" style="">您的座位号</div>
         <div class="van-col van-col--12 number" style="text-align: right">
           <input id="number" type="text" v-model="newseat" ref="input">
         </div>
@@ -89,7 +89,7 @@
         i: -1,
         skuArr: [],
         num: 1,
-        is_sku: this.issku, // 规格弹窗
+        is_sku: this.demand_sku, // 规格弹窗
         readonly: true
       }
     },
@@ -104,6 +104,19 @@
       var userInfo = localStorage.getItem('userInfo')
       this.userInfo = JSON.parse(userInfo) // 转为JSON
       // console.log('tel: ' + this.userInfo.tel)
+      // 获取个人信息接口
+      this.axios.get('/api/user/userInfo?id=' + this.userInfo.token).then(res => {
+        // console.log(res)
+        if (res.data.status === 200) {
+          if (res.data.data !== null) {
+            // this.member = res.data.data
+            // this.id = res.data.data.id
+            // this.tel = res.data.data.mobile
+            // this.name = res.data.data.name
+            this.seat = res.data.data.seatNo
+          }
+        }
+      })
       this.axios({
           method: 'get',
           url: '/api/callbell/list'
@@ -175,7 +188,7 @@
         this.axios({
           method: 'get',
           url: '/api/order/list',
-          headers: {'token': this.userInfo.token}
+          headers: { 'token': this.userInfo.token }
         }).then((res) => {
           // console.log('我的订单')
           // console.log(res)
@@ -189,7 +202,7 @@
       },
       // 点击蒙层取消
       cancelMask: function () {
-        this.demand_sku = false
+        // this.demand_sku = false
         this.$parent.cancelMask()
       },
       // 选择种类
@@ -218,7 +231,7 @@
               'num': this.newnum,
               'mobile': this.userInfo.tel
             },
-            headers: {'token': this.userInfo.token}
+            headers: { 'token': this.userInfo.token }
           }).then((res) => {
             if (res.data.status === 200) {
               // 弹框提交成功
@@ -237,7 +250,7 @@
       },
       setInputStatus() {
         let _self = this
-        this.axios.get('/api/4g/status', {emulateJSON: true})
+        this.axios.get('/api/4g/status', { emulateJSON: true })
           .then(function (response) {
             if (response.data.status === 200) {
               // 登录后跳转的页面
@@ -274,8 +287,8 @@
   }
 
   .cab-common .cube-btn {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
 
   .productConten p {
@@ -284,9 +297,9 @@
   }
 
   .product-footerlist {
-    margin-top: 10px;
-    padding: 5px 0px;
-    margin: auto 15px;
+    // margin-top: 10px;
+    // padding: 5px 0px;
+
   }
 
   .product-footerlist li {
@@ -302,6 +315,7 @@
 
   .product-line {
     line-height 20px;
+    padding:10px 0;
   }
 
   .product-footerlist li.productActive {
@@ -319,7 +333,6 @@
     color: #000;
     pointer-events: none;
   }
-
 
   .item {
     width: 100%;
@@ -347,7 +360,7 @@
 
   .sku_specification3 {
     /*border-top: 1px solid #EEEEEE*/
-    border-bottom 1px solid #EEEEEE
+    // border-bottom 1px solid #EEEEEE
     box-sizing: border-box;
     padding: 5px 0px;
     margin auto 15px;

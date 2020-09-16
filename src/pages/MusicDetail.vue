@@ -122,63 +122,8 @@
         let musicStr = sessionStorage.getItem('curMusic')
         return JSON.parse(musicStr)
       },
-      getLyric() {
-        // 播放歌词play()
-        // 暂停歌词stop()
-        // 歌词跳转seek(startTime)
-        // 切换播放/暂停状态 togglePlay()
-        // const _this = this
-        // debugger
-        if (this.$store.lyric) {
-          this.$store.lyric.stop()
-        }
-        // if (this.$store.state.lyric) {
-        //   this.$store.state.lyric.stop()
-        // }
-        this.initLyric()
-      },
-      initLyric() {
-        let _this = this
-        let music = this.getPlayMusic()
-        // music.lyrics = music.lyrics.replace('/cancrieasproxy/music', '')
-        this.axios.get(music.lyrics).then(response => {
-          // console.log(response.data)
-          if (response.status === 200) {
-            // _this.$store.state.lyric = null
-            _this.$store.state.lyric = this.instanceLyric(response.data, _this.handleLyric)
-            // _this.$store.state.lyric.play()
-          }
-        })
-      },
-      instanceLyric(data, handle) {
-        this.lyric = new Lyric(data, handle)
-        // 调用this.lyric.play()方法时，进行歌词播放，引起Lyric实例对象（这里是this.lyric）的lineNum改变。当lineNum改变时，触发回调函数this.handleLyric。
-         // 如果当前歌曲为播放状态，调用歌词对象的播放方法，播放歌词
-        // if (this.$store.state.playFlag === true) {
-        //     this.$store.state.lyric.play()
-        // }
-        return this.lyric
-      },
-      changePlayType: function (type) {
-        this.$store.state.playType = type
-      },
-      // 在回调函数中，我们需要得到当前播放的歌词行数（this.currentLineNum），并且实现歌词面板的滚动（使用Scroll组件实现滚动），使当前播放的歌词始终在屏幕中间位置。
-      handleLyric({ lineNum, txt }) {
-        let _this = this
-        setTimeout(function() {
-          _this.currentLineNum = lineNum
-          // 若当前行大于5,开始滚动,以保歌词显示于中间位置
-          if (lineNum > 4) {
-            let lineEl = _this.$refs.lyricLine[lineNum - 4]
-            // 结合better-scroll，滚动歌词
-            _this.$refs.lyricList.scrollToElement(lineEl, 1000)
-          } else {
-            _this.$refs.lyricList.scrollToElement(0, 0, 1000)
-          }
-        }, 100)
-      },
       pauseMusic() {
-        this.$store.state.lyric.stop()
+        this.$store.state.lyric.togglePlay()
         let audio = document.getElementById('music')
         audio.pause()
         this.$store.state.playFlag = false
@@ -195,8 +140,74 @@
         audio.play()
         this.$store.state.playFlag = true
       },
+      getLyric() {
+        // 播放歌词play()
+        // 暂停歌词stop()
+        // 歌词跳转seek(startTime)
+        // 切换播放/暂停状态 togglePlay()
+        // const _this = this
+        // debugger
+        // this.$store.state.lyric歌词就没了
+        if (this.$store.lyric) {
+          this.$store.lyric.stop()
+        }
+        this.initLyric()
+      },
+      initLyric() {
+        let _this = this
+        let music = this.getPlayMusic()
+        // music.lyrics = music.lyrics.replace('/cancrieasproxy/music', '')
+        this.axios.get(music.lyrics).then(response => {
+          // console.log(response)
+          // if (this.$store.state.lyric !== response.data) {
+          //   return
+          // }
+          if (response.status === 200) {
+            // _this.$store.state.lyric = this.instanceLyric(response.data, _this.handleLyric)
+            _this.$store.state.lyric = new Lyric(response.data, _this.handleLyric)
+          }
+          // 点进去歌词高亮显示
+          if (_this.$store.state.playFlag === true) {
+            _this.$store.state.lyric.play()
+          }
+        }).catch(() => {
+          _this.$store.state.lyric = null
+          // this.playingLyric = ''
+          _this.currentLineNum = 0
+        })
+      },
+      // instanceLyric(data, handle) {
+      //   this.lyric = new Lyric(data, handle)
+      //   // 调用this.lyric.play()方法时，进行歌词播放，引起Lyric实例对象（这里是this.lyric）的lineNum改变。当lineNum改变时，触发回调函数this.handleLyric。
+      //    // 如果当前歌曲为播放状态，调用歌词对象的播放方法，播放歌词
+      //   if (this.$store.state.playFlag === true) {
+      //       this.$store.state.lyric.play()
+      //   }
+      //   return this.lyric
+      // },
+      changePlayType: function (type) {
+        this.$store.state.playType = type
+      },
+      // 在回调函数中，我们需要得到当前播放的歌词行数（this.currentLineNum），并且实现歌词面板的滚动（使用Scroll组件实现滚动），使当前播放的歌词始终在屏幕中间位置。
+      handleLyric({ lineNum, txt }) {
+        let _this = this
+        // setTimeout(functio n() {
+          _this.currentLineNum = lineNum
+          // 若当前行大于5,开始滚动,以保歌词显示于中间位置
+          if (lineNum > 4) {
+            let lineEl = _this.$refs.lyricLine[lineNum - 4]
+            // 结合better-scroll，滚动歌词
+            _this.$refs.lyricList.scrollToElement(lineEl, 1000)
+          } else {
+            _this.$refs.lyricList.scrollToElement(0, 0, 1000)
+          }
+        // }, 100)
+      },
       startPlayOrPause() {
         let audio = document.getElementById('music')
+        // if (this.$store.state.lyric) {
+        //   this.$store.state.lyric.togglePlay()
+        // }
         // debugger
         if (this.$store.state.playFlag) {
           // audio.currentTime = 0
@@ -206,11 +217,15 @@
         } else {
           this.$store.state.playFlag = true
           audio.play()
-        }
-        if (this.$store.state.lyric) {
-           // 歌曲暂停时，歌词暂停播放
+          // 解决暂停再开始以后歌词对不上的问题  这样暂停不了
+          // audio.currentTime = pre
+          // this.$store.state.lyric.seek(parseInt(pre * 1000))
           this.$store.state.lyric.togglePlay()
         }
+        // if (this.$store.state.lyric) {
+        //    // 歌曲暂停时，歌词暂停播放
+        //   this.$store.state.lyric.togglePlay()
+        // }
         // audio.play();// 这个就是播放
         // this.$store.state.playFlag = false
         // this.$store.commit('playMusic', { 'src': this.$store.state.playMusic, 'musicName': this.$store.state.musicName })
@@ -236,6 +251,9 @@
     computed: {
       isFollow() {
         return this.$store.state.lyric // 需要监听的数据
+      },
+      currentSong() {
+        return this.$store.state.musicName
       }
     },
     // 解决bug:暂停歌曲之后，切换模式，歌曲会继续播放
@@ -243,21 +261,29 @@
       isFollow(newVal, oldVal) {
         // console.error('11111')
         if (newVal !== oldVal) {
-          this.initLyric()
           this.lines = newVal.lines
         }
-        // 解决歌词跳动的bug，因为new Lyric中定时器，切换歌曲时候，清除定时器
-        // if (this.$store.state.lyric) {
-        //   this.$store.state.lyric.stop()
-        //   this.$store.state.lyric = null
-        //   this.currentLineNum = 0
-        //   this.currentTime = 0
-        // }
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-          // this.$refs.audio.play()
-          this.initLyric()
-        }, 1000)
+      },
+      currentSong(newVal, oldVal) {
+        // 解决歌切换 歌词不变的bug
+        if (newVal !== oldVal) {
+          // 解决歌词跳动的bug，因为new Lyric中定时器，切换歌曲时候，清除定时器
+          if (this.$store.state.lyric) {
+            // 重置歌词
+            // this.$store.state.lyric.seek(0)
+            // this.$store.state.lyric.stop()
+            // this.currentTime = 0
+            // this.currentLineNum = 0
+            // this.$store.state.lyric = ''
+          }
+          // 歌词音乐刚好跟上
+          let audio = document.getElementById('music')
+          this.timer = setTimeout(() => {
+            audio.play()
+            this.getLyric()
+          }, 100)
+          clearTimeout(this.timer)
+        }
       }
     },
     components: {

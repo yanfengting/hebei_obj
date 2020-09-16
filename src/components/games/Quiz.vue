@@ -2,7 +2,7 @@
   <div id="videoAction">
     <cube-scroll ref="scroll" :scrollEvents="['scroll','scrollEnd']"
                  :data="data"
-                 @scroll="onScroll">
+                 @scroll="onScroll" style="min-height:600px">
       <div style="position: relative;display: flex">
         <ul style="clear: both;display: block;width:100%">
           <li v-for="item in data"
@@ -16,6 +16,11 @@
             <p>{{item.name}}</p>
           </li>
         </ul>
+      </div>
+      <div class="bottom-desp" v-show="bottomshow">
+        <hr>
+        <span>我是有底线的哦</span>
+        <hr>
       </div>
     </cube-scroll>
   </div>
@@ -33,7 +38,9 @@
       }
     },
     data() {
-      return {}
+      return {
+        bottomshow: false
+      }
     },
     mounted() {
     },
@@ -41,6 +48,7 @@
       let _this = this
       setTimeout(function () {
         _this.$refs.scroll.refresh()
+        _this.bottomshow = true
       }, 2000)
     },
     methods: {
@@ -56,7 +64,7 @@
 <style type="text/css">
   .cube-scroll-list-wrapper{
     height: 100%;
-    padding-bottom: 200px;
+    /* padding-bottom: 200px; */
   }
     
   #videoAction{

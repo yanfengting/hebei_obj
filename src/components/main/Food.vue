@@ -6,7 +6,7 @@
         <!--<p class="second">Restaurant</p>-->
       </div>
       <span class="first-font">餐食</span>
-      <food-alert :food_sku="is_sku"
+      <food-alert :food_sku="food_sku"
                   :seat="newseat"></food-alert>
     </div>
   </div>
@@ -25,44 +25,17 @@ export default {
   },
 
   watch: {
-    sku_food: function (val, oldVal) {
-      this.is_sku = val
-       }
+    // food_sku: function (val, oldVal) {
+    //   this.is_sku = val
+    //    }
   },
   data() {
     return {
       newseat: this.seat,
-      is_sku: this.food_sku
+      // is_sku: this.food_sku
     }
   },
   created: function() {
-    // this.getParams()
-    // 接收传给main页面的表单数据
-    var userInfo = localStorage.getItem('userInfo')
-    this.userInfo = JSON.parse(userInfo) // 转为JSON
-    this.axios({
-        method: 'get',
-        url: '/api/food/list'
-      }
-    ).then((res) => {
-      // console.log(res)
-      if (res.status === 200) {
-        if (res.data.data != null) {
-          this.skuArr = res.data.data
-          this.price = res.data.data[0].price
-          this.type = res.data.data[0].type
-          // this.foodtype = res.data.data.type
-          this.thumbUrl = res.data.data[0].thumbUrl
-          this.name = res.data.data[0].type
-          this.description = res.data.data[0].description
-          this.i = -1
-        } else {
-          this.is_sku = false
-        }
-      } else {
-        console.error('数据获取失败，请刷新重试')
-      }
-    })
   },
   methods: {
     // 点餐食
@@ -76,13 +49,13 @@ export default {
             this.$dialog('该功能已关闭，暂时无法使用', 'my-eable')
             return
           }
-          this.is_sku = true
+          this.food_sku = true
         }
       })
     },
     // 点击蒙层取消
     cancelMask: function() {
-      this.is_sku = false
+      this.food_sku = false
     }
   }
 }
@@ -95,8 +68,8 @@ export default {
   background:#0088ff !important;
 }
 
-.productConten {
-  /*margin-bottom: 10px;*/
+.productPadding {
+  // margin-bottom: 15px;
 }
 
 .productConten p {
@@ -154,15 +127,15 @@ export default {
 
 // 种类
 .product-delcom {
-  // margin: 5px 10px 0px 10px ;
+  margin: 0 15px;
   color: #323232;
   font-size: 12px;
 }
 
 .product-footerlist {
-  margin-top: 4px;
-  padding: 5px 0px;
-  margin: auto 15px;
+  // margin-top: 4px;
+  // padding: 5px 0px;
+
 }
 
 .product-footerlist li {
@@ -283,13 +256,14 @@ export default {
   max-height: 300px;
   overflow: scroll;
 }
-
+.sku_margin {
+  margin: auto 15px;
+}
 .sku_specification2 {
-  border-top: 1px solid #EEEEEE
+  // border-top: 1px solid #EEEEEE
   // border-bottom 1px solid #EEEEEE
   box-sizing: border-box;
   padding: 5px 0px;
-  margin auto 15px;
 }
 .sku-close {
   width: 30px;

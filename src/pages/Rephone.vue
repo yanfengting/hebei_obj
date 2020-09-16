@@ -3,7 +3,8 @@
     <Nav></Nav>
     <div class="rename">
         <div style="padding: 25px">
-          <input id="tel"  type="text" v-model="userInfo.tel" ref="name" >
+          <!-- 11位的数字 -->
+          <input id="tel"  type="text" v-model="tel" ref="tel" maxlength="11" onkeyup="value=value.replace(/[^\d]/g,'')">
         </div>
         <div style="padding: 20px 50px">
             <cube-button type="submit" style="background: linear-gradient(180deg,#349ffd,#027eea);" @click="save">保 存
@@ -15,44 +16,43 @@
 </template>
 <script>
   import Nav from '../components/common/Nav.vue'
+  import registryToast from '../components/common/toast/index'
 
   export default {
     data() {
       return {
-        msg: '',
-        userInfo: '',
+        tel: '',
         orderNum: 0,
-        verification: '',
         member: [] // 从数据库拿到的加入购物车的商品
       }
     },
     methods: {
-    save () {
-        this.$router.push('/account_center')
-    }
+      save () {
+        var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/ // 验证是不是以13,15,18,17开头的数字
+        // let id = this.$route.query.id
+        this.newphone = this.$refs.tel.value
+        let _this = this
+        if (myreg.test(this.tel)) {
+          this.axios({
+            method: 'post',
+            url: '/api/user/update',
+            params: {
+              mobile: _this.newphone,
+              id: this.$route.query.id
+            }
+          }).then((res) => {
+            console.log(res)
+            if (res.data.status === 200) {
+              this.$router.push('/account_center')
+            }
+          })
+        } else {
+          registryToast.showToast('请输入有效的手机号码！')
+        }
+      }
     },
     created: function () {
-      var userInfo = localStorage.getItem('userInfo')
-      console.log(userInfo)
-      this.userInfo = JSON.parse(userInfo)
-      // let name = this.$route.params.paramsName // 获取传入参数的值 不是router 而是route
-      // console.log(name)
-      this.axios({
-        method: 'post',
-        url: '/api/user/login',
-        params: {
-          'name': this.userInfo.name
-        }
-      }).then((res) => {
-        console.log(res)
-        this.verification = res.verification
-        // if (res.data.status === 200) {
-        //   this.loginForm.token = res.data.data
-        //   localStorage.setItem('userInfo', JSON.stringify(this.loginForm)) // JSON.stringify 将JSON转为字符串存到变量里
-        //   this.$router.push({ path: '/main' })
-        //   registryToast.showToast('登录成功')
-        // }
-        })
+     this.tel = this.$route.query.tel
     },
     components: {
       Nav

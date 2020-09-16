@@ -174,7 +174,7 @@
 
   .cube-scroll-list-wrapper
     height: 100%
-    padding-bottom 200px;
+    // padding-bottom 200px;
 
   // border 1px solid red
   .vod-item-img

@@ -195,7 +195,7 @@ img {
 }
 .line input {
   color: #c1c1c1;
-  margin-right: 4.412vw;
+  /* margin-right: 4.412vw; */
   width: 60%;
   text-align: right;
   background: #fff;

@@ -1,7 +1,7 @@
 <template>
   <div v-if="is_sku == true" class="specification_mask2" style="z-index: 11">
     <div class="specification_com2" @click.stop="is_sku==false">
-      <div class="productConten">
+      <div class="productConten productPadding">
         <div class="product-delcom">
           <div class="header">
             <div class="img-wrap upgrade "
@@ -48,8 +48,8 @@
           <button class="van-stepper__plus" @click="increment">+</button>
         </div>
       </div>
-      <div type="flex" class="van-row--flex sku_specification3">
-        <div class="van-col van-col--12" :span="12" style="line-height: 45px;">您的座位号</div>
+      <div type="flex" class="van-row--flex sku_specification3 sku_border">
+        <div class="van-col van-col--12" :span="12" style="">您的座位号</div>
         <div class="van-col van-col--12 number" style="text-align: right">
           <input id="number" type="text" :readonly="readonly? false: 'readonly'" v-model="newseat" ref="input">
         </div>
@@ -81,6 +81,7 @@
     data() {
       return {
         price: null,
+        newseat: this.seat,
         thumbUrl: null,
         i: -1,
         skuArr: [],
@@ -88,7 +89,6 @@
         unable: false,
         is_sku: this.upgrade_sku, // 规格弹窗
         description: '',
-        newseat: this.seat,
         readonly: true
       }
     },
@@ -98,6 +98,21 @@
       }
     },
     created: function () {
+      var userInfo = localStorage.getItem('userInfo')
+      this.userInfo = JSON.parse(userInfo) // 转为JSON
+      // 获取个人信息接口
+      this.axios.get('/api/user/userInfo?id=' + this.userInfo.token).then(res => {
+        // console.log(res)
+        if (res.data.status === 200) {
+          if (res.data.data !== null) {
+            // this.member = res.data.data
+            // this.id = res.data.data.id
+            // this.tel = res.data.data.mobile
+            // this.name = res.data.data.name
+            this.seat = res.data.data.seatNo
+          }
+        }
+      })
       this.axios({
         method: 'get',
         url: 'api/upgrade/list'
@@ -159,7 +174,7 @@
       },
       setInputStatus() {
         let _self = this
-        this.axios.get('/api/4g/status', {emulateJSON: true})
+        this.axios.get('/api/4g/status', { emulateJSON: true })
           .then(function (response) {
             if (response.data.status === 200) {
               // 登录后跳转的页面

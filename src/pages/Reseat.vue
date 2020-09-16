@@ -3,7 +3,8 @@
     <Nav></Nav>
     <div class="rename">
         <div style="padding: 25px">
-          <input id="seat"  type="text" v-model="userInfo.seat" ref="name" >
+          <!-- 只能输入英文和数字： -->
+          <input id="seat"  type="text" v-model="seat" ref="seat" οnkeyup="value=value.replace(/[\W]/g,'') ">
         </div>
         <div style="padding: 20px 50px">
             <cube-button type="submit" style="background: linear-gradient(180deg,#349ffd,#027eea);" @click="save">保 存
@@ -14,40 +15,44 @@
 </template>
 <script>
   import Nav from '../components/common/Nav.vue'
+  import registryToast from '../components/common/toast/index'
 
   export default {
     data() {
       return {
-        userInfo: ''
+        userInfo: '',
+        newseat: '',
+        seat: ''
       }
     },
     methods: {
       save () {
-        this.$router.push('/account_center')
+        this.seat = this.$route.query.seat
+        // let id = this.$route.query.id
+        this.newseat = this.$refs.seat.value
+        let _this = this
+        console.log(this.newseat) // input框接收一个传过来的座位号
+        if (this.newseat !== '') {
+          this.axios({
+            method: 'post',
+            url: '/api/user/update',
+            params: {
+              seatNo: _this.newseat,
+              id: this.$route.query.id
+            }
+          }).then((res) => {
+            console.log(res)
+            if (res.data.status === 200) {
+              this.$router.push('/account_center')
+            }
+          })
+        } else {
+          registryToast.showToast('座位号不能为空！')
+        }
       }
     },
     created: function () {
-      var userInfo = localStorage.getItem('userInfo')
-      console.log(userInfo)
-      this.userInfo = JSON.parse(userInfo)
-      // let name = this.$route.params.paramsName // 获取传入参数的值 不是router 而是route
-      // console.log(name)
-      this.axios({
-        method: 'post',
-        url: '/api/user/login',
-        params: {
-          'name': this.userInfo.name
-        }
-      }).then((res) => {
-        console.log(res)
-        this.verification = res.verification
-        // if (res.data.status === 200) {
-        //   this.loginForm.token = res.data.data
-        //   localStorage.setItem('userInfo', JSON.stringify(this.loginForm)) // JSON.stringify 将JSON转为字符串存到变量里
-        //   this.$router.push({ path: '/main' })
-        //   registryToast.showToast('登录成功')
-        // }
-        })
+      this.seat = this.$route.query.seat
     },
     components: {
       Nav

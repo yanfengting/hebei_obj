@@ -2,25 +2,22 @@
   <div style="box-sizing:border-box;">
     <Nav></Nav>
     <swiper></swiper>
-    <div class="gtype-3 clearfix" style="padding-top: 20px;">
+    <div class="gtype-3 clearfix" >
       <li class="gtype-item" @click="toShopList('航鲜')">
-        <div class="gtype-icon">
-          <img src="../assets/images/xianhang.png"
-               alt>
+        <div class="gtype-icon gift1">
+          <!-- <img class="gift1" alt> -->
         </div>
         <div class="gtype-txt">华夏航鲜</div>
       </li>
       <li class="gtype-item" @click="toShopList('文创')">
-        <div class="gtype-icon">
-          <img src="../assets/images/wenchuang.png"
-               alt>
+        <div class="gtype-icon gift2">
+          <!-- <img class="gift2"  alt> -->
         </div>
         <div class="gtype-txt">华夏文创</div>
       </li>
       <li class="gtype-item" @click="toShopList('旅游')">
-        <div class="gtype-icon">
-          <img src="../assets/images/lvyou.png"
-               alt>
+        <div class="gtype-icon gift3">
+          <!-- <img class=""  alt> -->
         </div>
         <div class="gtype-txt">华夏旅游</div>
       </li>
@@ -31,10 +28,10 @@
         <!--        <article class="m-list list-theme2 clearfix" v-for="(item, index) in giftArr" :key="index">-->
         <div v-for="(item, index) in giftArr" :key="index" @click="shopDetail(item)"
              class="list-item">
-          <div class="list-img">
-            <img v-bind:src="item.urlPoster"
-                 data-url="http://img1.shikee.com/try/2016/06/19/09430120929215230041.jpg_220x220.jpg">
-          </div>
+          <a class="f" :style="{'background': 'url('+item.urlPoster+') no-repeat','background-size': '100% 100%' }">
+            <!-- <img v-bind:src="item.urlPoster"
+                 data-url="http://img1.shikee.com/try/2016/06/19/09430120929215230041.jpg_220x220.jpg"> -->
+          </a>
           <div class="list-mes">
             <li class="list-title">{{item.name}}</li>
             <div class="list-mes-item">
@@ -117,32 +114,49 @@
   }
 </script>
 <style>
+.f {
+  width: 150px;
+  height: 150px;
+  background-size: 100% 100%;
+}
+  .gtype-item{
+    margin: 0 auto;
+  }
+  .gift1 {
+    height: 90px;
+    /* width: 150px; */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('../assets/images/xianhang.png');
+  }
+  .gift2 {
+    height: 90px;
+    /* width: 150px; */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('../assets/images/wenchuang.png');
+  }
+  .gift3 {
+    height: 90px;
+    /* width: 150px; */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('../assets/images/lvyou.png');
+  }
   .gtype-3 {
-    /*padding: 20px 0 0;*/
+    padding: 20px 10px 0;
     display: flex;
     justify-content: space-between;
     /*padding-left: 25px;*/
     /*box-shadow: rgb(197, 196, 196) 0px 0px 10px;*/
   }
 
-  /* .gtype-3 .gtype-item {
-    width: 31%;
-  } */
-  /*  .gtype-item {
-      text-align: center;
-      width: 33.33%;
-      float: left;
-      position: relative;
-      z-index: 0;
-      padding: 10px 0 0;
-      font-size: 13px;
-    }*/
-
   .gtype-icon {
-    height: 55px;
+    /* height: 55px; */
     display: flex;
     align-items: center;
     justify-content: center;
+    /* margin: 10px; */
   }
 
   .gtype-icon img {
@@ -156,7 +170,7 @@
     overflow: hidden;
     text-align: center;
     color: #95a9bf;
-    padding: 14px 10px 0px 10px;
+    /* padding: 10px; */
     line-height: 22px;
   }
 
@@ -211,7 +225,8 @@
     text-align: center;
     width: 46%;
     margin: 10px 3px;
-    box-shadow: 1.176vw 0.588vw 1.176vw #eef0f3;
+    /* box-shadow: 1.176vw 0.588vw 1.176vw #eef0f3; */
+    box-shadow: 0px 3px 8px rgba(0, 45, 128, 0.2);
     border-radius: 2.059vw;
   }
 
@@ -221,6 +236,9 @@
   }
 
   .list-item .list-mes .list-title {
+    /* width: 450px; */
+    margin: 0 auto;
+    /* height: 150px; */
     color: black;
     display: -webkit-box;
     overflow: hidden;

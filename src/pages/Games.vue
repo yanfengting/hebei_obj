@@ -3,7 +3,7 @@
     <Nav></Nav>
     <div class="tab-wrapper">
       <Gamestab :tabs="tabs"
-                :initialIndex=initindex></Gamestab>
+                :initialIndex='initindex'></Gamestab>
     </div>
   </div>
 </template>

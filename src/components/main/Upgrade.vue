@@ -14,7 +14,7 @@
   import UpgradeAlert from './UpgradeAlert'
 
   export default {
-    components: {UpgradeAlert},
+    components: { UpgradeAlert },
     props: {
       seat: {
         type: String
@@ -25,14 +25,14 @@
     },
     data() {
       return {
+        newseat: this.seat,
         price: null,
         thumbUrl: null,
         i: -1,
         skuArr: [],
         num: 1,
-        is_sku: this.upgrade_sku, // 规格弹窗
-        description: '',
-        newseat: this.seat
+        // is_sku: this.upgrade_sku, // 规格弹窗
+        description: ''
       }
     },
     created: function () {

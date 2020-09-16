@@ -73,13 +73,15 @@
         <a :href="item.resourceId"
            download="hebei_app.apk"
            v-if="item.resourceType == 4"
-           class="main-bak-height">
+           class="main-bak-height" @click="openApp"
+           :style="{'background': 'url('+item.src+') no-repeat', 'background-size': '100% 100%', 'background-position': 'center center' }">
           <img class="swipe-img"
                :src="item.src">
         </a>
         <a @click="router"
            v-else-if="item.resourceType == 3"
-           class="main-bak-height">
+           class="main-bak-height"
+           :style="{'background': 'url('+item.src+') no-repeat', 'background-size': '100% 100%', 'background-position': 'center center' }">
           <img class="swipe-img"
                :src="item.src">
         </a>
@@ -97,11 +99,11 @@
       <div class="maincontent">
         <!--<p class="title-one">客舱服务</p>-->
         <div class="cabin">
-          <Upgrade :seat=this.userInfo.seat :upgrade_sku=upgrade_sku></Upgrade>
+          <Upgrade :seat=seat :upgrade_sku=upgrade_sku></Upgrade>
           <!--<div class="cab clearfix">-->
           <!--<div class="cab-up">-->
-          <Demand :seat=this.userInfo.seat :demand_sku=demand_sku></Demand>
-          <Food :seat=this.userInfo.seat :food_sku=food_sku></Food>
+          <Demand :seat=seat :demand_sku=demand_sku></Demand>
+          <Food :seat=seat :food_sku=food_sku></Food>
           <!--</div>-->
           <!--<div class="cab-down">-->
           <div class="cab-common "
@@ -218,7 +220,7 @@
   import Upgrade from '../components/main/Upgrade.vue'
   import Demand from '../components/main/Demand.vue'
   import Food from '../components/main/Food.vue'
-  import registryDialog from '../components/common/dialog/index'
+  // import registryDialog from '../components/common/dialog/index'
   import registryToast from '../components/common/toast/index'
 
   export default {
@@ -237,7 +239,9 @@
         day: 0,
         type: 0,
         tcinfo: [],
-        online: true
+        online: true,
+        seat: ''
+        // seat: this.userInfo.seat
       }
     },
     created: function () {
@@ -252,6 +256,18 @@
         this.$router.push('/')
       }
       console.log(userInfo)
+      // 获取个人信息接口
+      this.axios.get('/api/user/userInfo?id=' + this.userInfo.token).then(res => {
+        console.log(res)
+        if (res.data.status === 200) {
+          if (res.data.data !== null) {
+            this.seat = res.data.data.seatNo !== '' ? res.data.data.seatNo : this.userInfo.seat
+          }
+        } else {
+          console.error('用户数据获取失败')
+        }
+      })
+      console.log(this.seat)
       // 判断在线状态/离线状态
       let _this = this
       this.axios.get('/api/4g/status', { emulateJSON: true })
@@ -268,7 +284,7 @@
         }, function (error) {
           console.error('请求失败', error)
         })
-      // console.log('seat ' + this.userInfo.seat)
+      // 请求广告数据
       this.axios.get('/api/adv/list?mobile=' + this.userInfo.tel + '&position=' + 1).then(res => {
         if (res.data.status === 200) {
           this.items = res.data.data
@@ -293,23 +309,35 @@
       $route: 'getParams'
     },
     methods: {
+      openApp() {
+        // 通过iframe的方式试图打开APP，如果能正常打开，会直接切换到APP，并自动阻止a标签的默认行为
+        // 否则打开a标签的href链接
+        var ifr = document.createElement('iframe')
+        // ifr.src = 'com.baidu.tieba://';
+        ifr.src = 'https://apps.apple.com/cn/app/%E6%B2%B3%E5%8C%97%E8%88%AA%E7%A9%BA/id1441284761'
+        ifr.style.display = 'none'
+        document.body.appendChild(ifr)
+        window.setTimeout(function() {
+          document.body.removeChild(ifr)
+        }, 3000)
+      },
       router () {
       // 请求会员数据 判断 如果手机号存在于数据库，提示已经注册会员
-      this.axios.get('/api/member/get?phone=' + this.userInfo.tel).then(res => {
-        // console.log(res)
-        if (res.data.status === 200) {
-          if (res.data.data != null) {
-            registryToast.showToast('您已经是会员了！')
-          } else if (this.online === true) {           
-            this.$router.push('/registered_member')
-          } else if (this.online === false) {
-            registryToast.showToast('离线状态下不能注册会员哦')
+        this.axios.get('/api/member/get?phone=' + this.userInfo.tel).then(res => {
+          // console.log(res)
+          if (res.data.status === 200) {
+            if (res.data.data != null) {
+              registryToast.showToast('您已经是会员了！')
+            } else if (this.online === true) {
+              this.$router.push('/registered_member')
+            } else if (this.online === false) {
+              registryToast.showToast('离线状态下不能注册会员哦')
+            }
+          } else {
+            console.error('数据获取失败')
           }
-        } else {
-          console.error('数据获取失败')
-        }
-      })
-    },
+        })
+      },
       initHeaderFlight() {
         let flightStr = sessionStorage.getItem('flight')
         if (flightStr) {
@@ -413,13 +441,11 @@
         this.$router.push('/opinion')
       },
       showwait() {
-        let toast = this.$dialog('该功能正在开发中', 'my-wait')
+        // let toast = this.$dialog('该功能正在开发中', 'my-wait')
       },
       dateDif(enddate, starttime) {
         // console.log(Date.parse(new Date(enddate)) + '---' + Date.parse(new Date(starttime)))
-
         var date = Date.parse(new Date(enddate)) - Date.parse(new Date(starttime))
-
         // console.log(date)
         var days = date / 1000 / 60 / 60 / 24
         var daysRound = Math.floor(days) // 天
@@ -428,8 +454,8 @@
         var hoursRound = Math.floor(hours)
         var minutes = date / 1000 / 60 - (24 * 60 * daysRound) - (60 * hoursRound)// 分钟
         var minutesRound = Math.floor(minutes)
-        var seconds = date / 1000 - (24 * 60 * 60 * daysRound) - (60 * 60 * hoursRound) - (60 * minutesRound)// 秒计算
-        var secondsRound = Math.floor(seconds)// 秒
+        // var seconds = date / 1000 - (24 * 60 * 60 * daysRound) - (60 * 60 * hoursRound) - (60 * minutesRound)// 秒计算
+        // var secondsRound = Math.floor(seconds)// 秒
         var time = (hoursRound + '小时' + minutesRound + '分钟')
         // console.log(time)
         return time

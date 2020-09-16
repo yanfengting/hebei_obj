@@ -3,7 +3,7 @@
     <Nav></Nav>
     <div class="account-center-top" >
       <div class='person' ></div>
-      <div>您好，{{userInfo.name}}</div>
+      <div>您好，{{name}}</div>
       <div v-if="member != 0"
            style="font-size:13px;color:rgb(255,203,0);margin-top:5px; line-height: 5vw;">
         <div>会员 {{grade}}</div>
@@ -18,28 +18,37 @@
     <div class="b-bo">
       <div class="t-content">
         <div class="line"><span>姓名</span>
-          <input id="name" readonly type="text" v-model="userInfo.name">
-          <div v-if="!online" class="line_img1"  alt="" @click="rename"></div>
+          <input id="name" readonly type="text" v-model="name">
+          <a class="mui-action-back mui-icon mui-icon-back" v-if="!online"   @click="rename">
+            <div class="line_img"></div> 
+          </a>
         </div>
         <div class="line line-centet"><span>座位号</span>
-          <input id="seat" readonly v-model="userInfo.seat" type="text">
-          <div v-if="!online" @click="reseat" class="line_img"  alt=""></div>
+          <input id="seat" readonly v-model="seat" type="text">
+            <a class="mui-action-back mui-icon mui-icon-back" v-if="!online" @click="reseat">
+              <div class="line_img"></div>
+            </a>
         </div>
 
         <div class="line"><span>联系方式</span>
-          <input id="tel" readonly type="text" v-model="userInfo.tel">
-          <div v-if="!online" @click="rephone" class="line_img"  ></div>
+          <input id="tel" readonly type="text" v-model="tel">
+          <a class="mui-action-back mui-icon mui-icon-back" v-if="!online" @click="rephone">
+            <div class="line_img"></div>
+          </a>
         </div>
       </div>
     </div>
     <div class="b-bo-b">
       <div class="b-center">
-        <div @click="accountOrder" class="line left15" ><span>我的订单
-        <img v-if="orderNum>0" class="logo-right" style="width: 8px; height: 8px;margin-top: 16px;"
-             src="../assets/images/hongdian.png">
-        </span>
+        <div @click="accountOrder" class="line left15" >
+          <span>我的订单
+          <img v-if="orderNum>0" class="logo-right" style="width: 8px; height: 8px;margin-top: 16px;"
+              src="../assets/images/hongdian.png">
+          </span>
           <input type="text" value="" disabled="disabled">
-          <div class="line_img"  ></div>
+          <a class="mui-action-back mui-icon mui-icon-back">
+            <div class="line_img"></div>
+          </a>
         </div>
       </div>
     </div>
@@ -56,22 +65,28 @@
   export default {
     data() {
       return {
+        grade: 0,
+        integral: 0,
         msg: '',
         userInfo: '',
         orderNum: 0,
         member: [], // 从数据库拿到的加入购物车的商品
-        online: true
+        online: true,
+        id: '',
+        tel: '',
+        name: '',
+        seat: ''
       }
     },
     methods: {
       rename () {
-        this.$router.push('/rename')
+        this.$router.push({ path: '/rename', query: {'id': this.id, 'name': this.name} })
       },
       reseat () {
-        this.$router.push('/reseat')
+        this.$router.push({ path: '/reseat', query: {'id': this.id, 'seat': this.seat} })
       },
       rephone () {
-        this.$router.push('/rephone')
+        this.$router.push({ path: '/rephone', query: {'id': this.id, 'tel': this.tel} })
       },
       accountOrder: function () {
         // console.log('我的订单')
@@ -131,6 +146,21 @@
           console.error('会员数据获取失败')
         }
       })
+      // 获取个人信息接口
+      this.axios.get('/api/user/userInfo?id=' + this.userInfo.token).then(res => {
+        console.log(res)
+        if (res.data.status === 200) {
+          if (res.data.data !== null) {
+            this.member = res.data.data
+            this.id = res.data.data.id
+            this.tel = res.data.data.mobile
+            this.name = res.data.data.name
+            this.seat = res.data.data.seatNo
+          }
+        } else {
+          console.error('用户数据获取失败')
+        }
+      })
     },
     components: {
       Nav
@@ -143,14 +173,16 @@
   }
 </style>
 <style lang="stylus" rel="stylesheet/stylus">
-  .line_img
-    height: 100%;
-    width: 100%;
-    background-color url(../assets/images/right.png)
+
   .person
-    height: 100%;
-    width: 100%;
-    background-color url(../assets/images/avatar.png)
+    height: 100px;
+    width: 100px;
+    margin: 10px auto;
+    // margin-top: 20%;
+    background-image url(../assets/images/avatar.png)
+    background-repeat no-repeat
+    background-size cover
+
   .account-center
     background-color #f7f9fc
     height: 100%;
@@ -159,7 +191,8 @@
     width 100%;
     text-align center
     color #fff
-    height 37%;
+    padding: 50px 0;
+    // height 37%;
     background-image url("../assets/images/center.png")
     background-repeat no-repeat
     background-size cover
@@ -204,12 +237,23 @@
     line-height 45px
     display flex;
     flex-direction row
+    align-items: center;
+  .line_img
+    height: 100%;
+    width: 100%;
+    background-repeat no-repeat
+    background-image url('../assets/images/right.png')
+    // background-size cover
+    margin-top: 3px;
+    background-size: 13px 18px;
+
   .line .line_img
-    width 6px
-    height 12px
-    position relative
-    right 15px
-    top 16px
+    // width: 7px;
+    // height: 13px;
+    // position relative
+    // right 15px
+    // // top 16px
+
   .line > span {
     display flex
     flex-direction row
@@ -228,13 +272,13 @@
 
   .line > a
     color #c1c1c1;
-    margin-right 15px
+    margin-right 10px
 
   .line input {
     width 60%;
     text-align right;
     color #c1c1c1;
     background #fff;
-    margin-right: 20px
+    margin-right: 15px
   }
 </style>

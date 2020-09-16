@@ -3,7 +3,8 @@
     <Nav></Nav>
     <div class="rename">
         <div style="padding: 25px">
-          <input id="name"  type="text" v-model="userInfo.name" ref="name" @change="changeEvent()">
+          <!-- 只能输入汉字 -->
+          <input id="name"  type="text" v-model="name" ref="name" @change="changeEvent()" οnkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')">
         </div>
         <div style="padding: 20px 50px">
             <cube-button type="submit" style="background: linear-gradient(180deg,#349ffd,#027eea);" @click="save">保 存
@@ -14,7 +15,7 @@
 </template>
 <script>
   import Nav from '../components/common/Nav.vue'
-
+  import registryToast from '../components/common/toast/index'
   export default {
     data() {
       return {
@@ -34,49 +35,47 @@
           this.newname = this.$refs.name.value
           console.log(this.newname) // input框接收一个传过来的座位号，编辑以后获取
           let _this = this
-          this.axios({
-            method: 'post',
-            url: '/api/user/login',
-            data: {
-            'name': _this.newname
-            }
-        }).then((res) => {
-            console.log(res)
-            // this.verification = res.verification
-            // if (res.data.status === 200) {
-            //   this.loginForm.token = res.data.data
-            //   localStorage.setItem('userInfo', JSON.stringify(this.loginForm)) // JSON.stringify 将JSON转为字符串存到变量里
-            //   this.$router.push({ path: '/main' })
-            //   registryToast.showToast('登录成功')
-            // }
-            this.$router.push('/account_center')
+          if (this.newseat !== '') {
+            this.axios({
+              method: 'post',
+              url: '/api/user/update',
+              params: {
+                name: _this.newname,
+                id: this.$route.query.id
+              }
+            }).then((res) => {
+              console.log(res)
+              if (res.data.status === 200) {
+                this.$router.push('/account_center')
+              }
             })
+          } else {
+            registryToast.showToast('姓名不能为空！')
+          }
       }
-
     },
     created: function () {
-      var userInfo = localStorage.getItem('userInfo')
-      this.userInfo = JSON.parse(userInfo)
-      this.name = userInfo.name
-      console.log(this.userInfo)
-      // let name = this.$route.params.paramsName // 获取传入参数的值 不是router 而是route
-      // console.log(name)
-      this.axios({
-        method: 'post',
-        url: '/api/user/login',
-        params: {
-          'name': this.userInfo.name
-        }
-      }).then((res) => {
-        console.log(res)
-        this.verification = res.verification
-        // if (res.data.status === 200) {
-        //   this.loginForm.token = res.data.data
-        //   localStorage.setItem('userInfo', JSON.stringify(this.loginForm)) // JSON.stringify 将JSON转为字符串存到变量里
-        //   this.$router.push({ path: '/main' })
-        //   registryToast.showToast('登录成功')
-        // }
-        })
+      // this.id = this.$route.query.id
+      this.name = this.$route.query.name
+      // var userInfo = localStorage.getItem('userInfo')
+      // this.userInfo = JSON.parse(userInfo)
+      // // this.name = userInfo.name
+      // console.log(this.userInfo)
+     // 获取个人信息接口
+      // this.axios.get('/api/user/userInfo?id=' + this.$route.query.id).then(res => {
+      //   console.log(res)
+      //   if (res.data.status === 200) {
+      //     if (res.data.data !== null) {
+      //       this.member = res.data.data
+      //       this.id = res.data.data.id
+      //       this.tel = res.data.data.mobile
+      //       this.name = res.data.data.name
+      //       this.seat = res.data.data.seatNo
+      //     }
+      //   } else {
+      //     console.error('用户数据获取失败')
+      //   }
+      // })
     },
     components: {
       Nav
