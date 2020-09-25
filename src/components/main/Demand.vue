@@ -5,7 +5,7 @@
         <!--<p class="second">Demand</p>-->
       </div>
       <span class="first-font">呼唤铃</span>
-      <demand-alert :demand_sku="demand_sku" :seat="newseat"></demand-alert>
+      <demand-alert :demand_sku="demand_sku" ></demand-alert>
     </div>
   </div>
 </template>
@@ -16,16 +16,16 @@
   export default {
     components: { DemandAlert },
     props: {
-      seat: {
-        type: String
-      },
+      // seat: {
+      //   type: String
+      // },
       demand_sku: {
         type: Boolean
       }
     },
     data() {
       return {
-        newseat: this.seat
+        // newseat: this.seat
       // is_sku: this.demand_sku
       }
     },
@@ -73,7 +73,6 @@
   .product-footerlist {
     margin-top: 10px;
     // padding: 5px 0px;
-    
   }
 
   .product-footerlist li {
@@ -133,7 +132,6 @@
   }
   .sku_border {
     border-bottom 1px solid #EEEEEE
-  
   }
   .sku_specification3 {
     /*border-top: 1px solid #EEEEEE*/

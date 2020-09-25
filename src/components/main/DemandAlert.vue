@@ -74,16 +74,16 @@
 
   export default {
     props: {
-      seat: {
-        type: String
-      },
+      // seat: {
+      //   type: String
+      // },
       demand_sku: {
         type: Boolean
       }
     },
     data() {
       return {
-        newseat: this.seat,
+        // newseat: this.seat,
         description: null,
         thumbUrl: null,
         i: -1,
@@ -93,7 +93,17 @@
         readonly: true
       }
     },
-
+    computed: {
+      newseat: {
+        get() {
+          return this.$store.state.seat || localStorage.getItem('seat')
+        }
+        // set(newVal) {
+        //   console.log(newVal)
+        //   this.$store.commit('newSeat', newVal)
+        // }
+      }
+    },
     watch: {
       demand_sku: function (val, oldVal) {
         this.is_sku = val

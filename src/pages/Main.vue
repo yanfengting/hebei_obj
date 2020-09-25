@@ -99,11 +99,11 @@
       <div class="maincontent">
         <!--<p class="title-one">客舱服务</p>-->
         <div class="cabin">
-          <Upgrade :seat=seat :upgrade_sku=upgrade_sku></Upgrade>
+          <Upgrade  :upgrade_sku=upgrade_sku></Upgrade>
           <!--<div class="cab clearfix">-->
           <!--<div class="cab-up">-->
-          <Demand :seat=seat :demand_sku=demand_sku></Demand>
-          <Food :seat=seat :food_sku=food_sku></Food>
+          <Demand  :demand_sku=demand_sku></Demand>
+          <Food  :food_sku=food_sku></Food>
           <!--</div>-->
           <!--<div class="cab-down">-->
           <div class="cab-common "
@@ -239,13 +239,17 @@
         day: 0,
         type: 0,
         tcinfo: [],
-        online: true,
-        seat: ''
-        // seat: this.userInfo.seat
+        online: true
+        // seat: ''
       }
     },
+    destroyed() {
+      this.$store.commit('seat', JSON.parse(localStorage.getItem('seat')))
+    },
     created: function () {
-      console.log(this.$store.state.playFlag)
+      this.$store.state.seat = JSON.parse(localStorage.getItem('seat'))
+      // this.seat = this.$store.state.seat
+      let _this = this
       // this.getParams()
       // 接收传给main页面的表单数据
       var userInfo = localStorage.getItem('userInfo')
@@ -256,20 +260,7 @@
         this.$router.push('/')
       }
       console.log(userInfo)
-      // 获取个人信息接口
-      this.axios.get('/api/user/userInfo?id=' + this.userInfo.token).then(res => {
-        console.log(res)
-        if (res.data.status === 200) {
-          if (res.data.data !== null) {
-            this.seat = res.data.data.seatNo !== '' ? res.data.data.seatNo : this.userInfo.seat
-          }
-        } else {
-          console.error('用户数据获取失败')
-        }
-      })
-      console.log(this.seat)
       // 判断在线状态/离线状态
-      let _this = this
       this.axios.get('/api/4g/status', { emulateJSON: true })
         .then(function (res) {
           // console.log(res)
@@ -290,11 +281,12 @@
           this.items = res.data.data
         }
       })
+      // 请求订单数据
       this.axios({
         method: 'post',
         url: 'api/order/unfinished'
       }).then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.status === 200) {
           this.orderNum = res.data.data
           // this.giftArr = res.data.data
@@ -310,16 +302,25 @@
     },
     methods: {
       openApp() {
+        // 判断是Android还是iPhone, Android直接下载，iPhone跳出二维码
         // 通过iframe的方式试图打开APP，如果能正常打开，会直接切换到APP，并自动阻止a标签的默认行为
         // 否则打开a标签的href链接
-        var ifr = document.createElement('iframe')
-        // ifr.src = 'com.baidu.tieba://';
-        ifr.src = 'https://apps.apple.com/cn/app/%E6%B2%B3%E5%8C%97%E8%88%AA%E7%A9%BA/id1441284761'
-        ifr.style.display = 'none'
-        document.body.appendChild(ifr)
-        window.setTimeout(function() {
-          document.body.removeChild(ifr)
-        }, 3000)
+        var u = navigator.userAgent, app = navigator.appVersion
+        // var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; // Android
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios
+        // if (isAndroid) {
+        //     var link = document.createElement('a')
+        //     link.href = this.src
+        //     link.download = this.item.urlPoster || 'default.jpg'
+        //     link.click()
+        // }
+        if (isIOS) {
+          this.toast = this.$createToast({
+            txt: '请长按图片保存图片',
+            type: 'txt'
+          })
+          this.toast.show()
+        }
       },
       router () {
       // 请求会员数据 判断 如果手机号存在于数据库，提示已经注册会员

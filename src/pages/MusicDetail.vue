@@ -199,15 +199,16 @@
             // 结合better-scroll，滚动歌词
             _this.$refs.lyricList.scrollToElement(lineEl, 1000)
           } else {
+            // 如果小于4，则滚动到顶部
             _this.$refs.lyricList.scrollToElement(0, 0, 1000)
           }
         // }, 100)
       },
       startPlayOrPause() {
         let audio = document.getElementById('music')
-        // if (this.$store.state.lyric) {
-        //   this.$store.state.lyric.togglePlay()
-        // }
+        if (this.$store.state.lyric) {
+          this.$store.state.lyric.togglePlay()
+        }
         // debugger
         if (this.$store.state.playFlag) {
           // audio.currentTime = 0
@@ -220,7 +221,7 @@
           // 解决暂停再开始以后歌词对不上的问题  这样暂停不了
           // audio.currentTime = pre
           // this.$store.state.lyric.seek(parseInt(pre * 1000))
-          this.$store.state.lyric.togglePlay()
+          // this.$store.state.lyric.togglePlay()
         }
         // if (this.$store.state.lyric) {
         //    // 歌曲暂停时，歌词暂停播放

@@ -238,6 +238,8 @@
               if (res.data.status === 200) {
                 this.loginForm.token = res.data.data
                 localStorage.setItem('userInfo', JSON.stringify(this.loginForm)) // JSON.stringify 将JSON转为字符串存到变量里
+                localStorage.setItem('seat', JSON.stringify(this.loginForm.seat))
+                this.$store.commit('newSeat', this.loginForm.seat)
                 this.$router.push({ path: '/main' })
                 registryToast.showToast('登录成功')
               } else {
@@ -295,6 +297,8 @@
               if (res.data.status === 200) {
                 this.loginForm.token = res.data.data
                 localStorage.setItem('userInfo', JSON.stringify(this.loginForm)) // JSON.stringify 将JSON转为字符串存到变量里
+                localStorage.setItem('seat', JSON.stringify(this.loginForm.seat))
+                this.$store.commit('newSeat', this.loginForm.seat)
                 this.$router.push({ path: '/main' })
                 registryToast.showToast('登录成功')
               } else {
@@ -303,7 +307,7 @@
               }
             })
             // 把表单数据传给main页面
-            localStorage.setItem('userInfo', JSON.stringify(this.loginForm)) // JSON.stringify 将JSON转为字符串存到变量里
+            // localStorage.setItem('userInfo', JSON.stringify(this.loginForm)) // JSON.stringify 将JSON转为字符串存到变量里
             sessionStorage.removeItem('formitem')
           }
         }

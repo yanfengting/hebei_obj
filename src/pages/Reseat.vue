@@ -3,8 +3,8 @@
     <Nav></Nav>
     <div class="rename">
         <div style="padding: 25px">
-          <!-- 只能输入英文和数字： -->
-          <input id="seat"  type="text" v-model="seat" ref="seat" οnkeyup="value=value.replace(/[\W]/g,'') ">
+          <!-- 只能输入英文和数字： @input="newSeat" -->
+          <input id="seat"  type="text" v-model="seat"  ref="seat"  οnkeyup="value=value.replace(/[\W]/g,'') ">
         </div>
         <div style="padding: 20px 50px">
             <cube-button type="submit" style="background: linear-gradient(180deg,#349ffd,#027eea);" @click="save">保 存
@@ -21,15 +21,30 @@
     data() {
       return {
         userInfo: '',
-        newseat: '',
-        seat: ''
+        newseat: ''
+      }
+    },
+    computed: {
+      seat: {
+        get() {
+          return this.$route.query.seat
+        },
+        set(newVal) {
+          console.log(newVal)
+          this.$store.commit('newSeat', newVal)
+        }
       }
     },
     methods: {
+      // newSeat(){
+      //   this.$store.commit('newSeat', e.target.value)
+      // },
       save () {
-        this.seat = this.$route.query.seat
+        // this.seat = this.$route.query.seat
         // let id = this.$route.query.id
         this.newseat = this.$refs.seat.value
+        // this.loginForm.seat = this.newseat
+        // localStorage.setItem('userInfo.seat', JSON.stringify(this.newseat))
         let _this = this
         console.log(this.newseat) // input框接收一个传过来的座位号
         if (this.newseat !== '') {
@@ -52,7 +67,7 @@
       }
     },
     created: function () {
-      this.seat = this.$route.query.seat
+      // this.seat = this.$route.query.seat
     },
     components: {
       Nav

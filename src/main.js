@@ -59,7 +59,7 @@ axios.interceptors.response.use(function (response) {
   return response
 }, function (error) {
   if (error.message.includes('timeout')) { // 判断请求异常信息中是否含有超时timeout字符串
-    return {data: {'status': 601}}
+    return { data: { 'status': 601 } }
   }
   // Do something with response error
   return Promise.reject(error)
@@ -72,17 +72,23 @@ Vue.prototype.$dialog = (text, icon = 'success', show = true) => {
   return registryDialog.showDialog(text, icon, show)
 }
 Vue.use(audio)
-let vue = new Vue({
+new Vue({
   router,
   watch: {
     '$route.path': function (newVal, oldVal) {
-      /*let videos = document.getElementsByTagName('video')
+      /* let videos = document.getElementsByTagName('video')
       for (let item in videos) {
         item.pause()
-      }*/
+      } */
     }
   },
   store,
+  // created() {
+  //   this.$store.state.seat = JSON.parse(localStorage.getItem('seat'))
+  // },
+  // destroyed() {
+  //   this.$store.commit('seat', JSON.parse(localStorage.getItem('seat')));
+  // },
   // audio,
   render: h => h(App)
 }).$mount('#app')

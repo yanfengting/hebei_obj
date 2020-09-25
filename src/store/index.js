@@ -1,11 +1,13 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import axios from 'axios'
-import Lyric from 'lyric-parser'
+// import axios from 'axios'
+// import Lyric from 'lyric-parser'
 
 Vue.use(Vuex)
 
 const state = {
+  //   所有组件中都可以使用this.$store.state.seat获取公共数据
+  seat: JSON.parse(localStorage.getItem('seat')),
   isShow: false,
   curMusic: '',
   musicName: '',
@@ -36,21 +38,23 @@ const state = {
 }
 
 const getters = {
+  // getters实时监听state的状态
+  // this.$store.getters.fixCount调用
   isShowMethod(state) {
     return state.isShow
-  }
-}
-
-const actions = {
-  showSideBar({ commit }) {
-    commit('showBar')
   },
-  hideSideBar({ commit }) {
-    commit('hideBar')
+  getSeat(state) { 
+    return state.seat
   }
 }
 
 const mutations = {
+  // mutations放改变state的初始值的方法
+  // 调用方法this.$store.comit('newSeat',2a)
+  newSeat(state, seat) {
+    state.seat = seat
+    localStorage.setItem('seat', JSON.stringify(seat))
+  },
   setCurHeight(state, height) {
     state.curHeight = height
   },
@@ -138,7 +142,7 @@ const mutations = {
         //   }
         // }
         // 单曲循环
-        resIndex = resIndex
+        // resIndex = resIndex
         music = musics[resIndex]
         break
     }
@@ -153,7 +157,7 @@ const mutations = {
   },
   nextMusic(state) {
     let music = mutations.getCurMusicIndex(state, 1)
-    let _this = this
+    // let _this = this
     mutations.playMusic(state, { 'src': music.src, 'musicName': music.name })
   },
   prevMusic(state) {
@@ -162,6 +166,20 @@ const mutations = {
   }
 }
 
+const actions = {
+  // actions 异步触发mutations的方法
+  // this.$store.dispatch("方法名");调用方法
+  showSideBar({ commit }) {
+    commit('showBar')
+  },
+  hideSideBar({ commit }) {
+    commit('hideBar')
+  }
+  // getNewSeat(context){
+  //   context.commit('newSeat')
+  // }
+  // 外部执行actions的方法只需要执行this.$store.dispatch('getNewSeat')
+}
 export default new Vuex.Store({
   state,
   getters,

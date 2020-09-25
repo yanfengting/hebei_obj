@@ -108,16 +108,16 @@ import registryToast from '../common/toast/index'
 
 export default {
   props: {
-    seat: {
-      type: String
-    },
+    // seat: {
+    //   type: String
+    // },
     food_sku: {
       type: Boolean
     }
   },
   data () {
     return {
-      newseat: this.seat,
+      // newseat: this.seat,
       price: null,
       type: null,
       thumbUrl: null,
@@ -129,7 +129,18 @@ export default {
       countPrice: 0
     }
   },
-
+  computed: {
+    newseat: {
+      get() {
+        console.log(this.$store.state.seat)
+        return this.$store.state.seat || localStorage.getItem('seat')
+      }
+      // set(newVal) {
+      //   console.log(newVal)
+      //   this.$store.commit('newSeat', newVal)
+      // }
+    }
+  },
   watch: {
     food_sku: function (val, oldVal) {
       this.is_sku = val

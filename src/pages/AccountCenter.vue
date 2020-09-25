@@ -20,7 +20,7 @@
         <div class="line"><span>姓名</span>
           <input id="name" readonly type="text" v-model="name">
           <a class="mui-action-back mui-icon mui-icon-back" v-if="!online"   @click="rename">
-            <div class="line_img"></div> 
+            <div class="line_img"></div>
           </a>
         </div>
         <div class="line line-centet"><span>座位号</span>
@@ -80,13 +80,13 @@
     },
     methods: {
       rename () {
-        this.$router.push({ path: '/rename', query: {'id': this.id, 'name': this.name} })
+        this.$router.push({ path: '/rename', query: { 'id': this.id, 'name': this.name } })
       },
       reseat () {
-        this.$router.push({ path: '/reseat', query: {'id': this.id, 'seat': this.seat} })
+        this.$router.push({ path: '/reseat', query: { 'id': this.id, 'seat': this.seat } })
       },
       rephone () {
-        this.$router.push({ path: '/rephone', query: {'id': this.id, 'tel': this.tel} })
+        this.$router.push({ path: '/rephone', query: { 'id': this.id, 'tel': this.tel } })
       },
       accountOrder: function () {
         // console.log('我的订单')
@@ -129,8 +129,6 @@
         if (res.status === 200) {
           this.orderNum = res.data.data
           // this.giftArr = res.data.data
-        } else {
-          console.error('订单数据获取失败，请刷新重试')
         }
       })
       // 请求会员数据 判断如果手机号存在于数据库，提示已经注册会员
@@ -142,8 +140,6 @@
             this.grade = res.data.data.grade
             this.integral = res.data.data.integral
           }
-        } else {
-          console.error('会员数据获取失败')
         }
       })
       // 获取个人信息接口
@@ -156,9 +152,9 @@
             this.tel = res.data.data.mobile
             this.name = res.data.data.name
             this.seat = res.data.data.seatNo
+            // this.loginForm.token = res.data.data
+            // localStorage.setItem('userInfo', JSON.stringify(this.seat))
           }
-        } else {
-          console.error('用户数据获取失败')
         }
       })
     },

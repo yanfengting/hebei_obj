@@ -6,8 +6,7 @@
         <!--<p class="second">Restaurant</p>-->
       </div>
       <span class="first-font">餐食</span>
-      <food-alert :food_sku="food_sku"
-                  :seat="newseat"></food-alert>
+      <food-alert :food_sku="food_sku"></food-alert>
     </div>
   </div>
 </template>
@@ -16,14 +15,13 @@ import FoodAlert from './FoodAlert'
 export default {
   components: { FoodAlert },
   props: {
-    seat: {
-      type: String
-    },
+    // seat: {
+    //   type: String
+    // },
     food_sku: {
       type: Boolean
     }
   },
-
   watch: {
     // food_sku: function (val, oldVal) {
     //   this.is_sku = val
@@ -31,7 +29,7 @@ export default {
   },
   data() {
     return {
-      newseat: this.seat,
+      // newseat: this.seat,
       // is_sku: this.food_sku
     }
   },

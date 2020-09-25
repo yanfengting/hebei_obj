@@ -71,9 +71,9 @@
 
   export default {
     props: {
-      seat: {
-        type: String
-      },
+      // seat: {
+      //   type: String
+      // },
       upgrade_sku: {
         type: Boolean
       }
@@ -81,7 +81,7 @@
     data() {
       return {
         price: null,
-        newseat: this.seat,
+        // newseat: this.seat,
         thumbUrl: null,
         i: -1,
         skuArr: [],
@@ -90,6 +90,18 @@
         is_sku: this.upgrade_sku, // 规格弹窗
         description: '',
         readonly: true
+      }
+    },
+    computed: {
+      newseat: {
+        get() {
+          console.log(this.userInfo.seat)
+          return this.$store.state.seat
+        }
+        // set(newVal) {
+        //   console.log(newVal)
+        //   this.$store.commit('newSeat', newVal)
+        // }
       }
     },
     watch: {
@@ -101,18 +113,18 @@
       var userInfo = localStorage.getItem('userInfo')
       this.userInfo = JSON.parse(userInfo) // 转为JSON
       // 获取个人信息接口
-      this.axios.get('/api/user/userInfo?id=' + this.userInfo.token).then(res => {
-        // console.log(res)
-        if (res.data.status === 200) {
-          if (res.data.data !== null) {
-            // this.member = res.data.data
-            // this.id = res.data.data.id
-            // this.tel = res.data.data.mobile
-            // this.name = res.data.data.name
-            this.seat = res.data.data.seatNo
-          }
-        }
-      })
+      // this.axios.get('/api/user/userInfo?id=' + this.userInfo.token).then(res => {
+      //   // console.log(res)
+      //   if (res.data.status === 200) {
+      //     if (res.data.data !== null) {
+      //       // this.member = res.data.data
+      //       // this.id = res.data.data.id
+      //       // this.tel = res.data.data.mobile
+      //       // this.name = res.data.data.name
+      //       this.seat = res.data.data.seatNo
+      //     }
+      //   }
+      // })
       this.axios({
         method: 'get',
         url: 'api/upgrade/list'

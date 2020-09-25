@@ -5,27 +5,27 @@
         <!--<p class="second">Upgrade</p>-->
       </div>
       <span class="first-font">升舱</span>
-      <upgrade-alert :upgrade_sku="upgrade_sku" :seat="newseat"></upgrade-alert>
+      <upgrade-alert :upgrade_sku="upgrade_sku"></upgrade-alert>
     </div>
   </div>
 </template>
 <script>
-  import registryToast from '../common/toast/index'
+  // import registryToast from '../common/toast/index'
   import UpgradeAlert from './UpgradeAlert'
 
   export default {
     components: { UpgradeAlert },
     props: {
-      seat: {
-        type: String
-      },
+      // seat: {
+      //   type: String
+      // },
       upgrade_sku: {
         type: Boolean
       }
     },
     data() {
       return {
-        newseat: this.seat,
+        // newseat: this.seat,
         price: null,
         thumbUrl: null,
         i: -1,

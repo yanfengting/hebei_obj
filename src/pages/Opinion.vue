@@ -137,9 +137,6 @@
           this.checked = false
         }
       },
-      showSide: function () {
-        this.$store.dispatch('showSideBar')
-      },
       back2: function () {
         if (this.value3.length > 1 || this.imgdata.length > 0 || this.phone.length > 0) {
           if (confirm('是否确认退出？')) {
@@ -164,7 +161,7 @@
           this.errors.push('请对服务态度作出评价！')
         } else if (this.value4 === 0) {
           this.errors.push('请对整体印象作出评价！')
-        }  else if (this.upload === '') {
+        } else if (this.upload === '') {
           this.errors.push('请选择至少一张图片！')
         } else if (this.phone === '') {
           this.errors.push('请输入手机号！')
